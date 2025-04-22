@@ -14,12 +14,12 @@
         let guessedIds = [];
 
         async function loadGameData() {
-            const response = await fetch("static/music_info.json");
-            const data = await response.json();
-            musicInfo = data;
-            const response2 = await fetch("static/alias.json");
-            const data2 = await response.json();
-            alias = data2;
+            const [musicResponse, aliasResponse] = await Promise.all([
+                fetch("static/music_info.json"),
+                fetch("static/alias.json")
+            ]);
+            musicInfo = await musicResponse.json();
+            alias = await aliasResponse.json();
         }
 
         function startGame() {
