@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maidle 游戏</title>
+    <script>
+        let musicInfo = {};
+        let alias = {};
+        let targetMusic = null;
+        let isPlaying = false;
+        let guesses = [];
+        let hintsList = [];
+        let guessedIds = [];
+
+        async function loadGameData() {
+            const response = await fetch("static/music_info.json");
+            const data = await response.json();
+            musicInfo = data;
+            const response2 = await fetch("static/alias.json");
+            const data2 = await response.json();
+            alias = data2;
+        }
+
+        function startGame() {
+            if (isPlaying) {
+                alert("游戏正在进行中，请先结束游戏！");
+                return;
+            }
+            const keys = Object.keys(musicInfo);
+            const randomIndex = Math.floor(Math.random() * keys.length);
+            targetMusic = musicInfo[keys[randomIndex]];
+            isPlaying = true;
+            guesses = [];
+            hintsList = [];
+            guessedIds = [];
+            document.getElementById("message").innerText = "游戏开始！你一共有十次机会猜曲目。";
+            document.getElementById("hints-container").innerHTML = "";
+        }
+
+        function getHint(target, guess) {
+            const versionToId = {
+                "maimai": 1, "maimai PLUS": 2, "maimai GreeN": 3, "maimai GreeN PLUS": 4,
+                "maimai ORANGE": 5, "maimai ORANGE PLUS": 6, "maimai PiNK": 7, "maimai PiNK PLUS": 8,
+                "maimai MURASAKi": 9, "maimai MURASAKi PLUS": 10, "maimai MiLK": 11, "MiLK PLUS": 12,
+                "maimai FiNALE": 13, "舞萌DX": 14, "舞萌DX2021": 15, "舞萌DX2022": 16,
+                "舞萌DX2023": 17, "舞萌DX2024": 18
+            };
+            const hints = [];
+            hints.push(`ID: ${target.id === guess.id ? "√ " : ""}${guess.id}`);
+            hints.push(`标题: ${target.title === guess.title ? "√ " : ""}${guess.title}`);
+            hints.push(`类型: ${target.type === guess.type ? "√ " : ""}${guess.type}`);
+            hints.push(`艺术家: ${target.artist === guess.artist ? "√ " : ""}${guess.artist}`);
+            hints.push(`流派: ${target.genre === guess.genre ? "√ " : ""}${guess.genre}`);
+            hints.push(`版本: ${target.version === guess.version ? "√ " : versionToId[target.version] > versionToId[guess.version] ? "→ 早了 " : "← 晚了 "}${guess.version}`);
+            hints.push(`BPM: ${target.bpm === guess.bpm ? "√ " : target.bpm > guess.bpm ? "↑ 低了 " : "↓ 高了 "}${guess.bpm}`);
+            return hints;
+        }
+
+        function submitGuess() {
+            if (!isPlaying) {
+                document.getElementById("message").innerText = "游戏未开始，请先开始游戏！";
+                return;
+            }
+
+            const guessId = document.getElementById("guess-id").value.trim();
+            if (!guessId) {
+                document.getElementById("message").innerText = "请输入曲目 ID 或别名。";
+                return;
+            }
+
+            let guessData = musicInfo[guessId];
+            if (!guessData) {
+                if (alias[guessId]) {
+                    if (alias[guessId].length > 1) {
+                        document.getElementById("message").innerText = "别名有多个匹配，请输入具体的曲目 ID。";
+                        return;
+                    } else {
+                        guessData = musicInfo[alias[guessId][0].id];
+                    }
+                } else {
+                    document.getElementById("message").innerText = "曲目不存在，请重新输入。";
+                    return;
+                }
+            }
+
+            if (guessedIds.includes(guessId)) {
+                document.getElementById("message").innerText = "你已经猜过这个曲目了，请重新输入。";
+                return;
+            }
+
+            guessedIds.push(guessId);
+            guesses.push(`ID: ${guessId}, 标题: ${guessData.title}`);
+            const hints = getHint(targetMusic, guessData);
+            hintsList.push(hints);
+
+            if (targetMusic.title === guessData.title) {
+                isPlaying = false;
+                document.getElementById("message").innerText = "🎉 恭喜你，猜对了！🎉";
+                renderHints();
+                return;
+            }
+
+            if (guesses.length >= 10) {
+                isPlaying = false;
+                document.getElementById("message").innerText = `你已经猜错10次，游戏结束！正确答案是 ${targetMusic.id}：${targetMusic.title}`;
+                renderHints();
+                return;
+            }
+
+            document.getElementById("message").innerText = "继续猜测！";
+            renderHints();
+        }
+
+        function quitGame() {
+            if (!isPlaying) {
+                document.getElementById("message").innerText = "当前没有正在进行的游戏。";
+                return;
+            }
+            isPlaying = false;
+            document.getElementById("message").innerText = `游戏结束，正确答案是 ${targetMusic.id}：${targetMusic.title}`;
+        }
+
+        function renderHints() {
+            const hintsContainer = document.getElementById("hints-container");
+            hintsContainer.innerHTML = "";
+            hintsList.forEach((hintSet, index) => {
+                const guessBlock = document.createElement("div");
+                guessBlock.innerHTML = `<strong>猜测 ${index + 1}:</strong>`;
+                hintSet.forEach(hint => {
+                    const hintLine = document.createElement("p");
+                    hintLine.style.color = hint.includes("√") ? "green" : hint.includes("↕") ? "orange" : "grey";
+                    hintLine.textContent = hint.replace("√", "").replace("↕", "");
+                    guessBlock.appendChild(hintLine);
+                });
+                hintsContainer.appendChild(guessBlock);
+            });
+        }
+
+        window.onload = async () => {
+            await loadGameData();
+            document.getElementById("start-game").addEventListener("click", startGame);
+            document.getElementById("submit-guess").addEventListener("click", submitGuess);
+            document.getElementById("quit-game").addEventListener("click", quitGame);
+        };
+    </script>
+</head>
+<body>
+    <h1>Maidle 游戏</h1>
+    <p>made by 宇航员Dale</p>
+    <div id="hints-container" style="margin-top: 20px; font-size: 16px; line-height: 0.7;"></div>
+    <div>
+        <input type="text" id="guess-id" placeholder="输入曲目id或别名" style="font-size: 18px; padding: 10px; width: 60%;">
+    </div>
+    <div>
+        <p>提示：可以输入曲目id或别名。绿色代表正确，定数黄色代表等级正确。</p>
+    </div>
+    <div>
+        <button id="start-game" style="font-size: 18px; padding: 10px 20px;">开始游戏</button>
+        <button id="submit-guess" style="font-size: 18px; padding: 10px 20px;">提交猜测</button>
+        <button id="quit-game" style="font-size: 18px; padding: 10px 20px;">不玩了</button>
+    </div>
+    <p id="message"></p>
+</body>
+</html>
