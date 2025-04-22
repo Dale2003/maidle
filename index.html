@@ -132,7 +132,7 @@
                 if (alias[guessId]) {
                     if (alias[guessId].length > 1) {
                         const matches = alias[guessId]
-                            .map(item => `ID: ${item.id}, 标题: ${item.title}`)
+                            .map(item => `ID: ${item.id}, 标题: ${item.name}`)
                             .join("<br>");
                         document.getElementById("message").innerHTML = `别名有多个匹配，请输入具体的曲目 ID：<br>${matches}`;
                         return;
