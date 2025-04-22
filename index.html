@@ -131,7 +131,10 @@
             if (!guessData) {
                 if (alias[guessId]) {
                     if (alias[guessId].length > 1) {
-                        document.getElementById("message").innerText = "别名有多个匹配，请输入具体的曲目 ID。";
+                        const matches = alias[guessId]
+                            .map(item => `ID: ${item.id}, 标题: ${item.title}`)
+                            .join("<br>");
+                        document.getElementById("message").innerHTML = `别名有多个匹配，请输入具体的曲目 ID：<br>${matches}`;
                         return;
                     } else {
                         guessId = alias[guessId][0].id;
