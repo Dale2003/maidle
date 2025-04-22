@@ -121,14 +121,13 @@
                 document.getElementById("message").innerText = "游戏未开始，请先开始游戏！";
                 return;
             }
-
-            const guessId = document.getElementById("guess-id").value.trim();
+            let guessId = document.getElementById("guess-id").value.trim();
             if (!guessId) {
                 document.getElementById("message").innerText = "请输入曲目 ID 或别名。";
                 return;
             }
 
-            const guessData = musicInfo[guessId];
+            let guessData = musicInfo[guessId];
             if (!guessData) {
                 if (alias[guessId]) {
                     if (alias[guessId].length > 1) {
