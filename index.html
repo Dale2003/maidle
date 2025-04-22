@@ -136,6 +136,11 @@
                         return;
                     } else {
                         guessId = alias[guessId][0].id;
+                        guessData = musicInfo[guessId];
+                        if (!guessData) {
+                            document.getElementById("message").innerText = "曲目不存在，请重新输入。";
+                            return;
+                        }
                     }
                 } else {
                     document.getElementById("message").innerText = "曲目不存在，请重新输入。";
@@ -152,6 +157,9 @@
             guesses.push(`ID: ${guessId}, 标题: ${guessData.title}`);
             const hints = getHint(targetMusic, guessData);
             hintsList.push(hints);
+
+            // 清空输入框
+            document.getElementById("guess-id").value = "";
 
             if (targetMusic.title === guessData.title) {
                 isPlaying = false;
