@@ -13,6 +13,23 @@
         let hintsList = [];
         let guessedIds = [];
 
+        // 统计变量
+        let visitCount = localStorage.getItem("visitCount") || 0;
+        let playCount = localStorage.getItem("playCount") || 0;
+        let successCount = localStorage.getItem("successCount") || 0;
+
+        // 页面加载时增加访问量
+        visitCount++;
+        localStorage.setItem("visitCount", visitCount);
+
+        function updateStats() {
+            document.getElementById("stats").innerHTML = `
+                访问量：${visitCount}<br>
+                游玩次数：${playCount}<br>
+                成功次数：${successCount}
+            `;
+        }
+
         async function loadGameData() {
             const [musicResponse, aliasResponse] = await Promise.all([
                 fetch("static/music_info.json"),
@@ -27,6 +44,9 @@
                 alert("游戏正在进行中，请先结束游戏！");
                 return;
             }
+            playCount++;
+            localStorage.setItem("playCount", playCount);
+            updateStats();
             const keys = Object.keys(musicInfo);
             const randomIndex = Math.floor(Math.random() * keys.length);
             targetMusic = musicInfo[keys[randomIndex]];
@@ -165,6 +185,9 @@
 
             if (targetMusic.title === guessData.title) {
                 isPlaying = false;
+                successCount++;
+                localStorage.setItem("successCount", successCount);
+                updateStats();
                 document.getElementById("message").innerText = "🎉 恭喜你，猜对了！🎉";
                 renderHints();
                 return;
@@ -208,6 +231,7 @@
 
         window.onload = async () => {
             await loadGameData();
+            updateStats();
             document.getElementById("start-game").addEventListener("click", startGame);
             document.getElementById("submit-guess").addEventListener("click", submitGuess);
             document.getElementById("quit-game").addEventListener("click", quitGame);
@@ -230,5 +254,6 @@
         <button id="quit-game" style="font-size: 18px; padding: 10px 20px;">不玩了</button>
     </div>
     <p id="message"></p>
+    <div id="stats" style="margin-top: 20px; font-size: 16px;"></div>
 </body>
 </html>
