@@ -135,7 +135,7 @@
                         document.getElementById("message").innerText = "别名有多个匹配，请输入具体的曲目 ID。";
                         return;
                     } else {
-                        guessData = musicInfo[alias[guessId][0].id];
+                        guessId = alias[guessId][0].id;
                     }
                 } else {
                     document.getElementById("message").innerText = "曲目不存在，请重新输入。";
