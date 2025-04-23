@@ -236,7 +236,7 @@
                 [0, 1].forEach(i => {
                     const hint = document.createElement("p");
                     hint.style.color = hintSet[i].includes("√") ? "green" : hintSet[i].includes("↕") ? "orange" : "grey";
-                    hint.style.margin = "3px 3px"; 
+                    hint.style.margin = "10px 0"; 
                     hint.textContent = hintSet[i].replace("√", "").replace("↕", "");
                     leftBlock.appendChild(hint);
                 });
