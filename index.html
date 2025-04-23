@@ -27,7 +27,25 @@
                 alert("游戏正在进行中，请先结束游戏！");
                 return;
             }
-            const keys = Object.keys(musicInfo);
+
+            const range = document.getElementById("difficulty-range").value;
+            const keys = Object.keys(musicInfo).filter(key => {
+                const music = musicInfo[key];
+                if (range === "13") {
+                    return music.masds >= 13;
+                } else if (range === "13+") {
+                    return music.masds >= 13.7; // 假设 13+ 表示 13.7 及以上
+                } else if (range === "14") {
+                    return music.masds >= 14;
+                }
+                return true; // 无限制
+            });
+
+            if (keys.length === 0) {
+                alert("没有符合条件的曲目，请选择其他范围！");
+                return;
+            }
+
             const randomIndex = Math.floor(Math.random() * keys.length);
             targetMusic = musicInfo[keys[randomIndex]];
             isPlaying = true;
@@ -223,6 +241,15 @@
     </div>
     <div>
         <p>提示：可以输入曲目id或别名。绿色代表正确，定数黄色代表等级正确。</p>
+    </div>
+    <div>
+        <label for="difficulty-range" style="font-size: 18px;">选择出题范围：</label>
+        <select id="difficulty-range" style="font-size: 18px; padding: 5px;">
+            <option value="unlimited">无限制</option>
+            <option value="13">紫谱定数13及以上</option>
+            <option value="13+">紫谱定数13+及以上</option>
+            <option value="14">紫谱定数14及以上</option>
+        </select>
     </div>
     <div>
         <button id="start-game" style="font-size: 18px; padding: 10px 20px;">开始游戏</button>
