@@ -216,10 +216,15 @@
             hintsList.forEach((hintSet, index) => {
                 const guessBlock = document.createElement("div");
                 guessBlock.style.display = "flex";
-                guessBlock.style.alignItems = "flex-start";
-                guessBlock.style.marginBottom = "10px";
+                guessBlock.style.flexDirection = "column";
+                guessBlock.style.marginBottom = "20px";
 
-                // 左侧部分：猜测标题和提示内容
+                // 上方部分：左侧（猜测标题和第一条提示）和右侧（曲绘）
+                const topBlock = document.createElement("div");
+                topBlock.style.display = "flex";
+                topBlock.style.alignItems = "flex-start";
+
+                // 左侧部分：猜测标题和第一条提示
                 const leftBlock = document.createElement("div");
                 leftBlock.style.display = "flex";
                 leftBlock.style.flexDirection = "column";
@@ -228,12 +233,10 @@
                 guessTitle.textContent = `猜测 ${index + 1}:`;
                 leftBlock.appendChild(guessTitle);
 
-                hintSet.forEach((hint, hintIndex) => {
-                    const hintLine = document.createElement("p");
-                    hintLine.style.color = hint.includes("√") ? "green" : hint.includes("↕") ? "orange" : "grey";
-                    hintLine.textContent = hint.replace("√", "").replace("↕", "");
-                    leftBlock.appendChild(hintLine);
-                });
+                const firstHint = document.createElement("p");
+                firstHint.style.color = hintSet[0].includes("√") ? "green" : hintSet[0].includes("↕") ? "orange" : "grey";
+                firstHint.textContent = hintSet[0].replace("√", "").replace("↕", "");
+                leftBlock.appendChild(firstHint);
 
                 // 右侧部分：曲绘
                 const jacketImg = document.createElement("img");
@@ -243,11 +246,24 @@
                 jacketImg.alt = "曲绘";
                 jacketImg.style.width = "50px";
                 jacketImg.style.height = "50px";
-                jacketImg.style.marginLeft = "10px";
+                jacketImg.style.marginLeft = "20px";
 
-                // 将左侧和右侧部分组合
-                guessBlock.appendChild(leftBlock);
-                guessBlock.appendChild(jacketImg);
+                // 将左侧和右侧部分组合到上方部分
+                topBlock.appendChild(leftBlock);
+                topBlock.appendChild(jacketImg);
+
+                // 下方部分：剩余的提示内容
+                const bottomBlock = document.createElement("div");
+                hintSet.slice(1).forEach(hint => {
+                    const hintLine = document.createElement("p");
+                    hintLine.style.color = hint.includes("√") ? "green" : hint.includes("↕") ? "orange" : "grey";
+                    hintLine.textContent = hint.replace("√", "").replace("↕", "");
+                    bottomBlock.appendChild(hintLine);
+                });
+
+                // 将上方部分和下方部分组合到整个块
+                guessBlock.appendChild(topBlock);
+                guessBlock.appendChild(bottomBlock);
 
                 hintsContainer.appendChild(guessBlock);
             });
