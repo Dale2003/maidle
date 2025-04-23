@@ -15,14 +15,35 @@
 
         async function loadGameData() {
             const loadingDiv = document.getElementById("loading");
+            const progressBar = document.getElementById("progress-bar");
             const progressText = document.getElementById("progress-text");
 
-            const [musicResponse, aliasResponse] = await Promise.all([
-                fetch("static/music_info.json"),
-                fetch("static/alias.json")
-            ]);
-            musicInfo = await musicResponse.json();
-            alias = await aliasResponse.json();
+            // 模拟加载数据的分步进度
+            const steps = [
+                { task: "加载音乐信息", fetch: fetch("static/music_info.json") },
+                { task: "加载别名信息", fetch: fetch("static/alias.json") }
+            ];
+
+            let progress = 0;
+            const stepIncrement = 100 / steps.length;
+
+            for (const step of steps) {
+                try {
+                    const response = await step.fetch;
+                    if (step.task === "加载音乐信息") {
+                        musicInfo = await response.json();
+                    } else if (step.task === "加载别名信息") {
+                        alias = await response.json();
+                    }
+                    progress += stepIncrement;
+                    progressBar.style.width = `${progress}%`;
+                    progressText.textContent = `${Math.round(progress)}%`;
+                } catch (error) {
+                    console.error(`${step.task}失败:`, error);
+                    loadingDiv.textContent = `${step.task}失败，请刷新页面重试！`;
+                    throw error;
+                }
+            }
             document.getElementById("loading").style.display = "none";
             document.getElementById("game-container").style.display = "block";
         }
@@ -302,6 +323,10 @@
     <!-- 加载提示 -->
     <div id="loading" style="font-size: 20px; text-align: center; margin-top: 50px;">
         加载数据中，请稍候...
+        <div style="margin-top: 20px; width: 80%; margin-left: auto; margin-right: auto; background-color: #f3f3f3; border-radius: 5px; height: 20px; overflow: hidden;">
+            <div id="progress-bar" style="width: 0%; height: 100%; background-color: #4caf50; transition: width 0.3s;"></div>
+        </div>
+        <p id="progress-text" style="margin-top: 10px;">0%</p>
     </div>
 
     <!-- 游戏内容 -->
