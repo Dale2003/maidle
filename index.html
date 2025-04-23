@@ -215,9 +215,27 @@
             hintsContainer.innerHTML = "";
             hintsList.forEach((hintSet, index) => {
                 const guessBlock = document.createElement("div");
-                guessBlock.innerHTML = `<strong>猜测 ${index + 1}:</strong>`;
+                guessBlock.style.display = "flex";
+                guessBlock.style.alignItems = "flex-start";
+                guessBlock.style.marginBottom = "10px";
 
-                // 添加曲绘
+                // 左侧部分：猜测标题和提示内容
+                const leftBlock = document.createElement("div");
+                leftBlock.style.display = "flex";
+                leftBlock.style.flexDirection = "column";
+
+                const guessTitle = document.createElement("strong");
+                guessTitle.textContent = `猜测 ${index + 1}:`;
+                leftBlock.appendChild(guessTitle);
+
+                hintSet.forEach((hint, hintIndex) => {
+                    const hintLine = document.createElement("p");
+                    hintLine.style.color = hint.includes("√") ? "green" : hint.includes("↕") ? "orange" : "grey";
+                    hintLine.textContent = hint.replace("√", "").replace("↕", "");
+                    leftBlock.appendChild(hintLine);
+                });
+
+                // 右侧部分：曲绘
                 const jacketImg = document.createElement("img");
                 const guessId = guessedIds[index];
                 const jacketId = guessId % 10000; // 计算曲绘 ID
@@ -226,16 +244,10 @@
                 jacketImg.style.width = "50px";
                 jacketImg.style.height = "50px";
                 jacketImg.style.marginLeft = "10px";
-                jacketImg.style.marginRight = "10px";
-                guessBlock.appendChild(jacketImg);
 
-                // 添加提示内容
-                hintSet.forEach(hint => {
-                    const hintLine = document.createElement("p");
-                    hintLine.style.color = hint.includes("√") ? "green" : hint.includes("↕") ? "orange" : "grey";
-                    hintLine.textContent = hint.replace("√", "").replace("↕", "");
-                    guessBlock.appendChild(hintLine);
-                });
+                // 将左侧和右侧部分组合
+                guessBlock.appendChild(leftBlock);
+                guessBlock.appendChild(jacketImg);
 
                 hintsContainer.appendChild(guessBlock);
             });
