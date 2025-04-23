@@ -88,7 +88,6 @@
             document.getElementById("hints-container").innerHTML = "";
         }
         function searchMatches() {
-            //console.log("当前 music_alias:", music_alias); // 检查是否为空
             const input = document.getElementById("guess-id").value.trim().toLowerCase();
             const resultsContainer = document.getElementById("search-results");
             resultsContainer.innerHTML = ""; // 清空之前的搜索结果
@@ -120,6 +119,16 @@
                 resultsContainer.style.display = "none";
             }
         }
+
+        // 点击筛选框外部时隐藏筛选框
+        document.addEventListener("click", (event) => {
+            const resultsContainer = document.getElementById("search-results");
+            const inputField = document.getElementById("guess-id");
+
+            if (!resultsContainer.contains(event.target) && event.target !== inputField) {
+                resultsContainer.style.display = "none";
+            }
+        });
 
         function selectMatch(id) {
             document.getElementById("guess-id").value = id;
