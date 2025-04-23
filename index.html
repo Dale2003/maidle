@@ -99,10 +99,11 @@
             const matches = Object.keys(musicInfo)
                 .filter(key => {
                     const music = musicInfo[key];
+                    const musicAlias = music_alias[key];
                     return (
                         key.toLowerCase().includes(input) || 
                         music.title.toLowerCase().includes(input) || 
-                        music.alias.some(alias => alias.toLowerCase().includes(input))
+                        musicAlias.some(alias => alias.name.toLowerCase().includes(input))
                     );
                 })
                 .map(key => {
