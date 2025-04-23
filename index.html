@@ -22,6 +22,7 @@
             const steps = [
                 { task: "加载音乐信息", fetch: fetch("static/music_info.json") },
                 { task: "加载别名信息", fetch: fetch("static/alias.json") }
+                { task: "加载其他数据", fetch: fetch("static/music_alias.json") } // 假设有其他数据需要加载
             ];
 
             let progress = 0;
@@ -34,6 +35,8 @@
                         musicInfo = await response.json();
                     } else if (step.task === "加载别名信息") {
                         alias = await response.json();
+                    } else if (step.task === "加载其他数据") {
+                        music_alias = await response.json();
                     }
                     progress += stepIncrement;
                     progressBar.style.width = `${progress}%`;
@@ -99,8 +102,7 @@
                     return (
                         key.toLowerCase().includes(input) || 
                         music.title.toLowerCase().includes(input) || 
-                        (alias[key] && alias[key].some(a => a.name.toLowerCase().includes(input))) || 
-                        Object.values(alias).some(aliases => aliases.some(a => a.name.toLowerCase().includes(input)))
+                        music.alias.some(alias => alias.toLowerCase().includes(input))
                     );
                 })
                 .map(key => {
