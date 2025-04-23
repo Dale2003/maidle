@@ -37,6 +37,8 @@
                     return music.masds >= 13.7; // 假设 13+ 表示 13.7 及以上
                 } else if (range === "14") {
                     return music.masds >= 14;
+                } else if (range === "14+") {
+                    return music.masds >= 14.7; // 假设 14+ 表示 14.7 及以上
                 }
                 return true; // 无限制
             });
@@ -249,6 +251,7 @@
             <option value="13">紫谱定数13及以上</option>
             <option value="13+">紫谱定数13+及以上</option>
             <option value="14">紫谱定数14及以上</option>
+            <option value="14+">紫谱定数14+及以上</option>
         </select>
     </div>
     <div>
