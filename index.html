@@ -68,8 +68,8 @@
             };
             const hints = [];
             hints.push(`ID: ${target.id === guess.id ? "√ " : ""}${guess.id}`);
-            hints.push(`标题: ${target.title === guess.title ? "√ " : ""}${guess.title}`);
             hints.push(`类型: ${target.type === guess.type ? "√ " : ""}${guess.type}`);
+            hints.push(`标题: ${target.title === guess.title ? "√ " : ""}${guess.title}`);
             hints.push(`艺术家: ${target.artist === guess.artist ? "√ " : ""}${guess.artist}`);
             hints.push(`流派: ${target.genre === guess.genre ? "√ " : ""}${guess.genre}`);
             hints.push(`版本: ${target.version === guess.version ? "√ " : versionToId[target.version] > versionToId[guess.version] ? "→ 早了 " : "← 晚了 "}${guess.version}`);
@@ -238,15 +238,20 @@
                 firstHint.textContent = hintSet[0].replace("√", "").replace("↕", "");
                 leftBlock.appendChild(firstHint);
 
+                const secondHint = document.createElement("p");
+                secondHint.style.color = hintSet[1].includes("√") ? "green" : hintSet[1].includes("↕") ? "orange" : "grey";
+                secondHint.textContent = hintSet[1].replace("√", "").replace("↕", "");
+                leftBlock.appendChild(secondHint);
+
                 // 右侧部分：曲绘
                 const jacketImg = document.createElement("img");
                 const guessId = guessedIds[index];
                 const jacketId = guessId % 10000; // 计算曲绘 ID
                 jacketImg.src = `https://assets2.lxns.net/maimai/jacket/${jacketId}.png`;
                 jacketImg.alt = "曲绘";
-                jacketImg.style.width = "50px";
-                jacketImg.style.height = "50px";
-                jacketImg.style.marginLeft = "20px";
+                jacketImg.style.width = "60px";
+                jacketImg.style.height = "60px";
+                jacketImg.style.marginLeft = "10px";
 
                 // 将左侧和右侧部分组合到上方部分
                 topBlock.appendChild(leftBlock);
@@ -254,7 +259,7 @@
 
                 // 下方部分：剩余的提示内容
                 const bottomBlock = document.createElement("div");
-                hintSet.slice(1).forEach(hint => {
+                hintSet.slice(2).forEach(hint => {
                     const hintLine = document.createElement("p");
                     hintLine.style.color = hint.includes("√") ? "green" : hint.includes("↕") ? "orange" : "grey";
                     hintLine.textContent = hint.replace("√", "").replace("↕", "");
