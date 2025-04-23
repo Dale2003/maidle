@@ -104,7 +104,7 @@
                     return (
                         key.toLowerCase().includes(input) || 
                         music.title.toLowerCase().includes(input) || 
-                        musicAlias.some(alias => alias.name.toLowerCase().includes(input))
+                        (musicAlias && musicAlias.some(alias => alias.name && alias.name.toLowerCase().includes(input)))
                     );
                 })
                 .map(key => {
