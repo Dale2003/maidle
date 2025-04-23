@@ -214,12 +214,26 @@
             hintsList.forEach((hintSet, index) => {
                 const guessBlock = document.createElement("div");
                 guessBlock.innerHTML = `<strong>猜测 ${index + 1}:</strong>`;
+
+                // 添加曲绘
+                const jacketImg = document.createElement("img");
+                const guessId = guessedIds[index];
+                const jacketId = guessId % 10000; // 计算曲绘 ID
+                jacketImg.src = `https://assets2.lxns.net/maimai/jacket/${jacketId}.png`;
+                jacketImg.alt = "曲绘";
+                jacketImg.style.width = "100px";
+                jacketImg.style.height = "100px";
+                jacketImg.style.marginRight = "10px";
+                guessBlock.appendChild(jacketImg);
+
+                // 添加提示内容
                 hintSet.forEach(hint => {
                     const hintLine = document.createElement("p");
                     hintLine.style.color = hint.includes("√") ? "green" : hint.includes("↕") ? "orange" : "grey";
                     hintLine.textContent = hint.replace("√", "").replace("↕", "");
                     guessBlock.appendChild(hintLine);
                 });
+
                 hintsContainer.appendChild(guessBlock);
             });
         }
