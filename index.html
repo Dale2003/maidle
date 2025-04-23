@@ -233,15 +233,12 @@
                 guessTitle.textContent = `猜测 ${index + 1}:`;
                 leftBlock.appendChild(guessTitle);
 
-                const firstHint = document.createElement("p");
-                firstHint.style.color = hintSet[0].includes("√") ? "green" : hintSet[0].includes("↕") ? "orange" : "grey";
-                firstHint.textContent = hintSet[0].replace("√", "").replace("↕", "");
-                leftBlock.appendChild(firstHint);
-
-                const secondHint = document.createElement("p");
-                secondHint.style.color = hintSet[1].includes("√") ? "green" : hintSet[1].includes("↕") ? "orange" : "grey";
-                secondHint.textContent = hintSet[1].replace("√", "").replace("↕", "");
-                leftBlock.appendChild(secondHint);
+                [0, 1].forEach(i => {
+                    const hint = document.createElement("p");
+                    hint.style.color = hintSet[i].includes("√") ? "green" : hintSet[i].includes("↕") ? "orange" : "grey";
+                    hint.textContent = hintSet[i].replace("√", "").replace("↕", "");
+                    leftBlock.appendChild(hint);
+                });
 
                 // 右侧部分：曲绘
                 const jacketImg = document.createElement("img");
