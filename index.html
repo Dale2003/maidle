@@ -218,7 +218,7 @@
                         document.getElementById("message").innerHTML = `别名有多个匹配，请输入具体的曲目 ID：<br>${matches}`;
                         return;
                     } else {
-                        guessId = alias[guessId][0].id;
+                        guessId = alias[guessId][0].id.value;
                         guessData = musicInfo[guessId];
                         if (!guessData) {
                             document.getElementById("message").innerText = "曲目不存在，请重新输入。";
