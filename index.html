@@ -231,12 +231,13 @@
 
                 const guessTitle = document.createElement("strong");
                 guessTitle.textContent = `猜测 ${index + 1}:`;
+                guessTitle.marginBottom = "5px";
                 leftBlock.appendChild(guessTitle);
 
                 [0, 1].forEach(i => {
                     const hint = document.createElement("p");
                     hint.style.color = hintSet[i].includes("√") ? "green" : hintSet[i].includes("↕") ? "orange" : "grey";
-                    hint.style.margin = "10px 0"; 
+                    hint.style.margin = "4px 4px"; 
                     hint.textContent = hintSet[i].replace("√", "").replace("↕", "");
                     leftBlock.appendChild(hint);
                 });
