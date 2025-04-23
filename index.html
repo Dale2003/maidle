@@ -20,6 +20,8 @@
             ]);
             musicInfo = await musicResponse.json();
             alias = await aliasResponse.json();
+            document.getElementById("loading").style.display = "none";
+            document.getElementById("game-container").style.display = "block";
         }
 
         function startGame() {
@@ -274,7 +276,19 @@
         }
 
         window.onload = async () => {
-            await loadGameData();
+            // 显示加载提示
+            const loadingDiv = document.getElementById("loading");
+            const gameContainer = document.getElementById("game-container");
+
+            try {
+                await loadGameData(); // 加载游戏数据
+                loadingDiv.style.display = "none"; // 隐藏加载提示
+                gameContainer.style.display = "block"; // 显示游戏内容
+            } catch (error) {
+                loadingDiv.textContent = "加载失败，请刷新页面重试！";
+                console.error("加载游戏数据时出错：", error);
+            }
+
             document.getElementById("start-game").addEventListener("click", startGame);
             document.getElementById("submit-guess").addEventListener("click", submitGuess);
             document.getElementById("quit-game").addEventListener("click", quitGame);
@@ -282,32 +296,38 @@
     </script>
 </head>
 <body>
-    <h1>Maidle 游戏</h1>
-    <p>made by 宇航员Dale</p>
-    <div id="hints-container" style="margin-top: 20px; font-size: 16px; line-height: 0.7;"></div>
-    <div>
-        <input type="text" id="guess-id" placeholder="输入曲目id或别名" style="font-size: 18px; padding: 10px; width: 60%;">
+    <!-- 加载提示 -->
+    <div id="loading" style="font-size: 20px; text-align: center; margin-top: 50px;">加载中，请稍候...</div>
+
+    <!-- 游戏内容 -->
+    <div id="game-container" style="display: none;">
+        <h1>Maidle 游戏</h1>
+        <p>made by 宇航员Dale</p>
+        <div id="hints-container" style="margin-top: 20px; font-size: 16px; line-height: 0.7;"></div>
+        <div>
+            <input type="text" id="guess-id" placeholder="输入曲目id或别名" style="font-size: 18px; padding: 10px; width: 60%;">
+        </div>
+        <div>
+            <p>提示：可以输入曲目id或别名。绿色代表正确，定数黄色代表等级正确。</p>
+        </div>
+        <div style="margin-top: 5px; margin-bottom: 15px;">
+            <label for="difficulty-range" style="font-size: 18px;">选择出题范围：</label>
+            <select id="difficulty-range" style="font-size: 18px; padding: 5px 5px;">
+                <option value="unlimited">无限制</option>
+                <option value="13">紫谱等级13及以上</option>
+                <option value="13+">紫谱等级13+及以上</option>
+                <option value="14">紫谱等级14及以上</option>
+                <option value="14+">紫谱等级14+及以上</option>
+            </select>
+        </div>
+        <div>
+            <button id="start-game" style="font-size: 18px; padding: 10px 20px;">开始游戏</button>
+            <button id="submit-guess" style="font-size: 18px; padding: 10px 20px;">提交猜测</button>
+            <button id="quit-game" style="font-size: 18px; padding: 10px 20px;">不玩了</button>
+        </div>
+        <p id="message"></p>
+        <p>本站总访问量：<span id="busuanzi_value_site_pv"></span> 次</p>
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
     </div>
-    <div>
-        <p>提示：可以输入曲目id或别名。绿色代表正确，定数黄色代表等级正确。</p>
-    </div>
-    <div style="margin-top: 5px; margin-bottom: 15px;">
-        <label for="difficulty-range" style="font-size: 18px;">选择出题范围：</label>
-        <select id="difficulty-range" style="font-size: 18px; padding: 5px 5px;">
-            <option value="unlimited">无限制</option>
-            <option value="13">紫谱等级13及以上</option>
-            <option value="13+">紫谱等级13+及以上</option>
-            <option value="14">紫谱等级14及以上</option>
-            <option value="14+">紫谱等级14+及以上</option>
-        </select>
-    </div>
-    <div>
-        <button id="start-game" style="font-size: 18px; padding: 10px 20px;">开始游戏</button>
-        <button id="submit-guess" style="font-size: 18px; padding: 10px 20px;">提交猜测</button>
-        <button id="quit-game" style="font-size: 18px; padding: 10px 20px;">不玩了</button>
-    </div>
-    <p id="message"></p>
-    <p>本站总访问量：<span id="busuanzi_value_site_pv"></span> 次</p>
-    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 </body>
 </html>
