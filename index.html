@@ -88,6 +88,7 @@
             document.getElementById("hints-container").innerHTML = "";
         }
         function searchMatches() {
+            console.log("当前 music_alias:", music_alias); // 检查是否为空
             const input = document.getElementById("guess-id").value.trim().toLowerCase();
             const resultsContainer = document.getElementById("search-results");
             resultsContainer.innerHTML = ""; // 清空之前的搜索结果
