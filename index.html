@@ -14,6 +14,18 @@
         let guessedIds = [];
 
         async function loadGameData() {
+            const loadingDiv = document.getElementById("loading");
+            const progressBar = document.getElementById("progress-bar");
+            const progressText = document.getElementById("progress-text");
+
+            // 模拟加载进度
+            for (let progress = 0; progress <= 100; progress += 10) {
+                progressBar.style.width = `${progress}%`;
+                progressText.textContent = `${progress}%`;
+                await new Promise(resolve => setTimeout(resolve, 200)); // 模拟延迟
+            }
+
+            // 实际加载数据
             const [musicResponse, aliasResponse] = await Promise.all([
                 fetch("static/music_info.json"),
                 fetch("static/alias.json")
@@ -297,7 +309,13 @@
 </head>
 <body>
     <!-- 加载提示 -->
-    <div id="loading" style="font-size: 20px; text-align: center; margin-top: 50px;">加载中，请稍候...</div>
+    <div id="loading" style="font-size: 20px; text-align: center; margin-top: 50px;">
+        加载中，请稍候...
+        <div style="margin-top: 20px; width: 80%; margin-left: auto; margin-right: auto; background-color: #f3f3f3; border-radius: 5px; height: 20px; overflow: hidden;">
+            <div id="progress-bar" style="width: 0%; height: 100%; background-color: #4caf50; transition: width 0.3s;"></div>
+        </div>
+        <p id="progress-text" style="margin-top: 10px;">0%</p>
+    </div>
 
     <!-- 游戏内容 -->
     <div id="game-container" style="display: none;">
