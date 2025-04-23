@@ -83,7 +83,42 @@
             document.getElementById("message").innerText = "游戏开始！你一共有十次机会猜曲目。";
             document.getElementById("hints-container").innerHTML = "";
         }
+        function searchMatches() {
+            const input = document.getElementById("guess-id").value.trim().toLowerCase();
+            const resultsContainer = document.getElementById("search-results");
+            resultsContainer.innerHTML = ""; // 清空之前的搜索结果
 
+            if (!input) {
+                resultsContainer.style.display = "none";
+                return;
+            }
+
+            const matches = Object.keys(musicInfo)
+                .filter(key => {
+                    const music = musicInfo[key];
+                    return (
+                        key.toLowerCase().includes(input) || 
+                        music.title.toLowerCase().includes(input) || 
+                        (alias[key] && alias[key].some(a => a.name.toLowerCase().includes(input)))
+                    );
+                })
+                .map(key => {
+                    const music = musicInfo[key];
+                    return `<div style="padding: 5px; cursor: pointer;" onclick="selectMatch('${key}')">${music.title} (ID: ${key})</div>`;
+                });
+
+            if (matches.length > 0) {
+                resultsContainer.innerHTML = matches.join("");
+                resultsContainer.style.display = "block";
+            } else {
+                resultsContainer.style.display = "none";
+            }
+        }
+
+        function selectMatch(id) {
+            document.getElementById("guess-id").value = id;
+            document.getElementById("search-results").style.display = "none";
+        }
         function getHint(target, guess) {
             const versionToId = {
                 "maimai": 1, "maimai PLUS": 2, "maimai GreeN": 3, "maimai GreeN PLUS": 4,
@@ -335,7 +370,8 @@
         <p>made by 宇航员Dale</p>
         <div id="hints-container" style="margin-top: 20px; font-size: 16px; line-height: 0.7;"></div>
         <div>
-            <input type="text" id="guess-id" placeholder="输入曲目id或别名" style="font-size: 18px; padding: 10px; width: 60%;">
+            <input type="text" id="guess-id" placeholder="输入曲目id或别名" style="font-size: 18px; padding: 10px; width: 60%;" oninput="searchMatches()">
+            <div id="search-results" style="position: absolute; background: white; border: 1px solid #ccc; max-height: 200px; overflow-y: auto; display: none; z-index: 1000; width: 60%;"></div>
         </div>
         <div>
             <p>提示：可以输入曲目id或别名。绿色代表正确，定数黄色代表等级正确。</p>
