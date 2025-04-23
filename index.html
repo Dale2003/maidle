@@ -22,7 +22,7 @@
             const steps = [
                 { task: "加载音乐信息", fetch: fetch("static/music_info.json") },
                 { task: "加载别名信息", fetch: fetch("static/alias.json") },
-                { task: "加载其他数据", fetch: fetch("static/music_alias.json") } // 假设有其他数据需要加载
+                { task: "加载其他数据", fetch: fetch("static/all_alias.json") } // 假设有其他数据需要加载
             ];
 
             let progress = 0;
@@ -99,7 +99,7 @@
             const matches = Object.keys(musicInfo)
                 .filter(key => {
                     const music = musicInfo[key];
-                    const musicAlias = music_alias[key].Alias;
+                    const musicAlias = music_alias[key];
                     return (
                         key.toLowerCase().includes(input) || 
                         music.title.toLowerCase().includes(input) || 

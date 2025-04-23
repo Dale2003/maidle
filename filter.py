@@ -8,7 +8,15 @@ for music in music_alias:
     if int(music["SongID"]) > 100000:
         music_alias.remove(music)
     
-print(music_alias)
+# 遍历，添加key为SongID的值
+
+all_alias = {}
+
+for music in music_alias:
+    if music["SongID"] not in all_alias:
+        all_alias[music["SongID"]] = music["Alias"]
+
+print(all_alias)
 # 保存
-with open('static/music_alias.json', 'w', encoding='utf-8') as f:
-    json.dump(music_alias, f, ensure_ascii=False, indent=4)
+with open('static/all_alias.json', 'w', encoding='utf-8') as f:
+    json.dump(all_alias, f, ensure_ascii=False, indent=4)
