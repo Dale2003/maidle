@@ -99,7 +99,8 @@
                     return (
                         key.toLowerCase().includes(input) || 
                         music.title.toLowerCase().includes(input) || 
-                        (alias[key] && alias[key].some(a => a.name.toLowerCase().includes(input)))
+                        (alias[key] && alias[key].some(a => a.name.toLowerCase().includes(input))) || 
+                        Object.values(alias).some(aliases => aliases.some(a => a.name.toLowerCase().includes(input)))
                     );
                 })
                 .map(key => {
