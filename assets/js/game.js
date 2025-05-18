@@ -255,21 +255,20 @@ function renderHints() {
 function quitGame() {
     if (!isPlaying) {
         document.getElementById("message").innerHTML = "<p>当前没有正在进行的游戏。</p>";
+        return;
+    }
+    
+    isPlaying = false;
+    document.getElementById("message").innerHTML = `<p>游戏结束，正确答案是 ${targetMusic.id}：${targetMusic.title}</p>`;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-}    document.getElementById("message").innerHTML = "<p>游戏已重置，点击\"开始游戏\"按钮开始新游戏。</p>";    document.getElementById("hints-container").innerHTML = "";    guessedIds = [];    hintsList = [];    guesses = [];    targetMusic = null;    isPlaying = false;function resetGame() {// 重置游戏状态}    document.getElementById("message").innerHTML = `<p>游戏结束，正确答案是 ${targetMusic.id}：${targetMusic.title}</p>`;    isPlaying = false;        }        return;}
+// 重置游戏状态
+function resetGame() {
+    isPlaying = false;
+    targetMusic = null;
+    guesses = [];
+    hintsList = [];
+    guessedIds = [];
+    document.getElementById("hints-container").innerHTML = "";
+    document.getElementById("message").innerHTML = "<p>游戏已重置，点击\"开始游戏\"按钮开始新游戏。</p>";
+}
