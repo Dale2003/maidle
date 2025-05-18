@@ -56,16 +56,20 @@ async function loadGameData() {
     document.getElementById("game-container").style.display = "block";
 }
 
-// 初始化页面
+// 修改初始化部分，确保游戏状态正确重置
 window.onload = async () => {
     // 显示加载提示
     const loadingDiv = document.getElementById("loading");
     const gameContainer = document.getElementById("game-container");
+    isPlaying = false; // 确保游戏状态初始化为未开始
 
     try {
         await loadGameData(); // 加载游戏数据
         loadingDiv.style.display = "none"; // 隐藏加载提示
         gameContainer.style.display = "block"; // 显示游戏内容
+        
+        // 显示初始提示信息
+        document.getElementById("message").innerHTML = "<p>点击\"开始游戏\"按钮开始游戏，可以选择不同的难度范围。</p>";
     } catch (error) {
         loadingDiv.textContent = "加载失败，请刷新页面重试！";
         console.error("加载游戏数据时出错：", error);

@@ -217,8 +217,9 @@ button:active {
 
 #search-results {
     position: absolute;
-    top: 100%;
-    left: 10%;
+    top: calc(100% - 8px);  /* 调整这里修复错位 */
+    left: 50%;
+    transform: translateX(-50%);  /* 居中定位 */
     width: 80%;
     max-width: 500px;
     background: white;

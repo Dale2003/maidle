@@ -1,8 +1,12 @@
 // 开始游戏
 function startGame() {
+    // 如果游戏正在进行，先确认是否要重新开始
     if (isPlaying) {
-        alert("游戏正在进行中，请先结束游戏！");
-        return;
+        if (confirm("游戏正在进行中，确定要开始新游戏吗？")) {
+            resetGame(); // 重置游戏状态
+        } else {
+            return; // 用户取消，继续当前游戏
+        }
     }
 
     const range = document.getElementById("difficulty-range").value;
@@ -21,7 +25,7 @@ function startGame() {
     });
 
     if (keys.length === 0) {
-        alert("没有符合条件的曲目，请选择其他范围！");
+        document.getElementById("message").innerHTML = "<p>没有符合条件的曲目，请选择其他范围！</p>";
         return;
     }
 
@@ -32,20 +36,20 @@ function startGame() {
     hintsList = [];
     guessedIds = [];
     
-    document.getElementById("message").innerHTML = "游戏开始！你一共有十次机会猜曲目，每猜一次会给出提示，提示包括标题、类型、艺术家、流派、版本、BPM、红紫谱定数、紫谱谱师、紫谱绝赞数量。绿色代表正确，定数黄色代表等级正确。";
+    document.getElementById("message").innerHTML = "<p>游戏开始！你一共有十次机会猜曲目，每猜一次会给出提示。</p>";
     document.getElementById("hints-container").innerHTML = "";
 }
 
 // 提交猜测
 function submitGuess() {
     if (!isPlaying) {
-        document.getElementById("message").innerText = "游戏未开始，请先开始游戏！";
+        document.getElementById("message").innerHTML = "<p>游戏未开始，请先开始游戏！</p>";
         return;
     }
     
     let guessId = document.getElementById("guess-id").value.trim();
     if (!guessId) {
-        document.getElementById("message").innerText = "请输入曲目 ID 或别名。";
+        document.getElementById("message").innerHTML = "<p>请输入曲目 ID 或别名。</p>";
         return;
     }
 
@@ -56,24 +60,24 @@ function submitGuess() {
                 const matches = alias[guessId]
                     .map(item => `ID: ${item.id}, 标题: ${item.name}`)
                     .join("<br>");
-                document.getElementById("message").innerHTML = `别名有多个匹配，请输入具体的曲目 ID：<br>${matches}`;
+                document.getElementById("message").innerHTML = `<p>别名有多个匹配，请输入具体的曲目 ID：<br>${matches}</p>`;
                 return;
             } else {
                 guessId = alias[guessId][0].id.toString();
                 guessData = musicInfo[guessId];
                 if (!guessData) {
-                    document.getElementById("message").innerText = "曲目不存在，请重新输入。";
+                    document.getElementById("message").innerHTML = "<p>曲目不存在，请重新输入。</p>";
                     return;
                 }
             }
         } else {
-            document.getElementById("message").innerText = "曲目不存在，请重新输入。";
+            document.getElementById("message").innerHTML = "<p>曲目不存在，请重新输入。</p>";
             return;
         }
     }
 
     if (guessedIds.includes(guessId)) {
-        document.getElementById("message").innerText = "你已经猜过这个曲目了，请重新输入。";
+        document.getElementById("message").innerHTML = "<p>你已经猜过这个曲目了，请重新输入。</p>";
         return;
     }
 
@@ -88,19 +92,19 @@ function submitGuess() {
 
     if (targetMusic.id === guessData.id) {
         isPlaying = false;
-        document.getElementById("message").innerText = "🎉 恭喜你，猜对了！🎉";
+        document.getElementById("message").innerHTML = "<p>🎉 恭喜你，猜对了！🎉</p>";
         renderHints();
         return;
     }
 
     if (guesses.length >= 10) {
         isPlaying = false;
-        document.getElementById("message").innerText = `你已经猜错10次，游戏结束！正确答案是 ${targetMusic.id}：${targetMusic.title}`;
+        document.getElementById("message").innerHTML = `<p>你已经猜错10次，游戏结束！正确答案是 ${targetMusic.id}：${targetMusic.title}</p>`;
         renderHints();
         return;
     }
 
-    document.getElementById("message").innerText = "继续猜测！";
+    document.getElementById("message").innerHTML = "<p>继续猜测！</p>";
     renderHints();
 }
 
@@ -197,12 +201,14 @@ function renderHints() {
         leftBlock.appendChild(guessTitle);
 
         [0, 1].forEach(i => {
-            const hint = document.createElement("p");
-            hint.className = hintSet[i].includes("√") ? "hint-line hint-correct" : 
-                            hintSet[i].includes("↕") ? "hint-line hint-partial" : 
-                            "hint-line hint-incorrect";
-            hint.textContent = hintSet[i].replace("√ ", "").replace("↕ ", "");
-            leftBlock.appendChild(hint);
+            if (hintSet[i]) {  // 确保提示存在
+                const hint = document.createElement("p");
+                hint.className = hintSet[i].includes("√") ? "hint-line hint-correct" : 
+                                hintSet[i].includes("↕") ? "hint-line hint-partial" : 
+                                "hint-line hint-incorrect";
+                hint.textContent = hintSet[i].replace("√ ", "").replace("↕ ", "");
+                leftBlock.appendChild(hint);
+            }
         });
 
         // 右侧部分：曲绘
@@ -212,6 +218,9 @@ function renderHints() {
         const jacketId = guessId % 10000; // 计算曲绘 ID
         jacketImg.src = `https://assets2.lxns.net/maimai/jacket/${jacketId}.png`;
         jacketImg.alt = "曲绘";
+        jacketImg.onerror = function() {
+            this.src = "assets/img/default-jacket.png"; // 添加默认图片用于加载失败情况
+        };
 
         // 将左侧和右侧部分组合到上方部分
         topBlock.appendChild(leftBlock);
@@ -221,14 +230,18 @@ function renderHints() {
         const bottomBlock = document.createElement("div");
         bottomBlock.className = "guess-bottom";
         
-        hintSet.slice(2).forEach(hint => {
-            const hintLine = document.createElement("p");
-            hintLine.className = hint.includes("√ ") ? "hint-line hint-correct" : 
-                                hint.includes("↕") ? "hint-line hint-partial" : 
-                                "hint-line hint-incorrect";
-            hintLine.textContent = hint.replace("√ ", "").replace("↕ ", "");
-            bottomBlock.appendChild(hintLine);
-        });
+        if (hintSet.length > 2) {  // 确保有更多提示
+            hintSet.slice(2).forEach(hint => {
+                if (hint) {  // 确保提示存在
+                    const hintLine = document.createElement("p");
+                    hintLine.className = hint.includes("√ ") ? "hint-line hint-correct" : 
+                                        hint.includes("↕") ? "hint-line hint-partial" : 
+                                        "hint-line hint-incorrect";
+                    hintLine.textContent = hint.replace("√ ", "").replace("↕ ", "");
+                    bottomBlock.appendChild(hintLine);
+                }
+            });
+        }
 
         // 将上方部分和下方部分组合到整个块
         guessBlock.appendChild(topBlock);
@@ -241,9 +254,22 @@ function renderHints() {
 // 退出游戏
 function quitGame() {
     if (!isPlaying) {
-        document.getElementById("message").innerText = "当前没有正在进行的游戏。";
-        return;
-    }
-    isPlaying = false;
-    document.getElementById("message").innerText = `游戏结束，正确答案是 ${targetMusic.id}：${targetMusic.title}`;
-}
+        document.getElementById("message").innerHTML = "<p>当前没有正在进行的游戏。</p>";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}    document.getElementById("message").innerHTML = "<p>游戏已重置，点击\"开始游戏\"按钮开始新游戏。</p>";    document.getElementById("hints-container").innerHTML = "";    guessedIds = [];    hintsList = [];    guesses = [];    targetMusic = null;    isPlaying = false;function resetGame() {// 重置游戏状态}    document.getElementById("message").innerHTML = `<p>游戏结束，正确答案是 ${targetMusic.id}：${targetMusic.title}</p>`;    isPlaying = false;        }        return;}
