@@ -131,63 +131,62 @@ function getHint(target, guess) {
     hints.push(`版本: ${target.version === guess.version ? "√ " : versionToId[target.version] > versionToId[guess.version] ? "→ 早了 " : "← 晚了 "}${guess.version}`);
     hints.push(`BPM: ${target.bpm === guess.bpm ? "√ " : target.bpm > guess.bpm ? "↑ 低了 " : "↓ 高了 "}${guess.bpm}`);
 
-    // 红谱(Expert)定数提示
+    // 红谱定数提示
     let expflag = 0;
-    if (target.expds !== undefined && guess.expds !== undefined) {
-        if (target.expds === guess.expds) {
-            expflag = 1;
-            hints.push(`红谱定数: ${expflag ? "↕ " : "√ "}${guess.expds}`);
-        } else {
-            hints.push(`红谱定数: ${target.expds > guess.expds ? "↑ 低了 " : "↓ 高了 "}${guess.expds}`);
-        }
-    } else if (target.expds !== undefined && guess.expds === undefined) {
-        hints.push(`红谱定数: ↑ 没有红谱`);
-    } else if (target.expds === undefined && guess.expds !== undefined) {
-        hints.push(`红谱定数: ↓ ${guess.expds}`);
-    } else {
-        hints.push(`红谱定数: √ 没有红谱`);
+    if (target.explevel === guess.explevel) {
         expflag = 1;
     }
-
-    // 紫谱(Master)定数提示
-    let lvflag = 0;
-    if (target.masds !== undefined && guess.masds !== undefined) {
-        if (target.masds === guess.masds) {
-            lvflag = 1;
-            hints.push(`紫谱定数: ${lvflag ? "↕ " : "√ "}${guess.masds}`);
-        } else if (target.masds > guess.masds) {
-            hints.push(`紫谱定数: ${lvflag ? "↑ ↕低了 " : "↑ 低了 "}${guess.masds}`);
+    if (target.expds === guess.expds) {
+        hints.push(`红谱定数: √ ${guess.expds}`);
+    } else if (target.expds > guess.expds) {
+        if (expflag === 1) {
+            hints.push(`红谱定数: ↑ ↕低了 ${guess.expds}`);
         } else {
-            hints.push(`紫谱定数: ${lvflag ? "↓ ↕高了 " : "↓ 高了 "}${guess.masds}`);
-        }
-
-        // 紫谱等级提示
-        if (target.maslevel === guess.maslevel) {
-            hints.push(`紫谱等级: √ ${guess.maslevel}`);
-        } else {
-            hints.push(`紫谱等级: ${parseFloat(target.maslevel) > parseFloat(guess.maslevel) ? "↑ 低了 " : "↓ 高了 "}${guess.maslevel}`);
-        }
-
-        // 紫谱谱师提示
-        if (target.mascharter === guess.mascharter) {
-            hints.push(`紫谱谱师: √ ${guess.mascharter}`);
-        } else {
-            hints.push(`紫谱谱师: ${guess.mascharter}`);
-        }
-
-        // 紫谱Break数量提示
-        if (target.masbreak === guess.masbreak) {
-            hints.push(`紫谱Break数: √ ${guess.masbreak}`);
-        } else if (target.masbreak > guess.masbreak) {
-            hints.push(`紫谱Break数: ↑ 少了 ${guess.masbreak}`);
-        } else {
-            hints.push(`紫谱Break数: ↓ 多了 ${guess.masbreak}`);
+            hints.push(`红谱定数: ↑ 低了 ${guess.expds}`);
         }
     } else {
-        hints.push(`紫谱定数: 数据缺失`);
-        hints.push(`紫谱等级: 数据缺失`);
-        hints.push(`紫谱谱师: 数据缺失`);
-        hints.push(`紫谱Break数: 数据缺失`);
+        if (expflag === 1) {
+            hints.push(`红谱定数: ↓ ↕高了 ${guess.expds}`);
+        } else {
+            hints.push(`红谱定数: ↓ 高了 ${guess.expds}`);
+        }
+    }
+
+    // 紫谱定数提示
+    let lvflag = 0;
+    if (target.maslevel === guess.maslevel) {
+        lvflag = 1;
+    }
+    if (target.masds === guess.masds) {
+        hints.push(`紫谱定数: √ ${guess.masds}`);
+    } else if (target.masds > guess.masds) {
+        if (lvflag === 1) {
+            hints.push(`紫谱定数: ↑ ↕低了 ${guess.masds}`);
+        } else {
+            hints.push(`紫谱定数: ↑ 低了 ${guess.masds}`);
+        }
+    } else {
+        if (lvflag === 1) {
+            hints.push(`紫谱定数: ↓ ↕高了 ${guess.masds}`);
+        } else {
+            hints.push(`紫谱定数: ↓ 高了 ${guess.masds}`);
+        }
+    }
+
+    // 紫谱谱师提示
+    if (target.mascharter === guess.mascharter) {
+        hints.push(`紫谱谱师: √ ${guess.mascharter}`);
+    } else {
+        hints.push(`紫谱谱师: ${guess.mascharter}`);
+    }
+
+    // 紫谱Break数量提示
+    if (target.masbreak === guess.masbreak) {
+        hints.push(`紫谱Break数: √ ${guess.masbreak}`);
+    } else if (target.masbreak > guess.masbreak) {
+        hints.push(`紫谱Break数: ↑ 少了 ${guess.masbreak}`);
+    } else {
+        hints.push(`紫谱Break数: ↓ 多了 ${guess.masbreak}`);
     }
 
     return hints;
