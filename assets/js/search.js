@@ -13,7 +13,7 @@ function searchMatches() {
         .filter(key => {
             const music = musicInfo[key];
             const musicAlias = music_alias[key]; 
-            const Alias = musicAlias.Alias || []; // 确保别名存在
+            const Alias = musicAlias['Alias'] || []; // 确保别名存在
             // 打印出来musicAlias
             console.log(`musicAlias for ${key}:`, musicAlias);
             // 检查 ID、标题和别名是否包含输入
