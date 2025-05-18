@@ -258,7 +258,7 @@ function renderHints() {
                     hintLine.className = hint.includes("√ ") ? "hint-line hint-correct" : 
                                         hint.includes("↕") ? "hint-line hint-partial" : 
                                         "hint-line hint-incorrect";
-                    hintLine.textContent = hint.replace("√ ", "").replace("↕ ", "");
+                    hintLine.textContent = hint.replace("√ ", "").replace("↕", "");
                     bottomBlock.appendChild(hintLine);
                 }
             });
