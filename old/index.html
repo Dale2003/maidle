@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maidle 游戏</title>
+    <script>
+        let musicInfo = {};
+        let alias = {};
+        let music_alias = {};
+        let targetMusic = null;
+        let isPlaying = false;
+        let guesses = [];
+        let hintsList = [];
+        let guessedIds = [];
+
+        async function loadGameData() {
+            const loadingDiv = document.getElementById("loading");
+            const progressBar = document.getElementById("progress-bar");
+            const progressText = document.getElementById("progress-text");
+
+            // 模拟加载数据的分步进度
+            const steps = [
+                { task: "加载音乐信息", fetch: fetch("static/music_info.json") },
+                { task: "加载别名信息", fetch: fetch("static/alias.json") },
+                { task: "加载其他数据", fetch: fetch("static/all_alias.json") } // 假设有其他数据需要加载
+            ];
+
+            let progress = 0;
+            const stepIncrement = 100 / steps.length;
+
+            for (const step of steps) {
+                try {
+                    const response = await step.fetch;
+                    if (step.task === "加载音乐信息") {
+                        musicInfo = await response.json();
+                    } else if (step.task === "加载别名信息") {
+                        alias = await response.json();
+                    } else if (step.task === "加载其他数据") {
+                        music_alias = await response.json();
+                    }
+                    progress += stepIncrement;
+                    progressBar.style.width = `${progress}%`;
+                    progressText.textContent = `${Math.round(progress)}%`;
+                } catch (error) {
+                    console.error(`${step.task}失败:`, error);
+                    loadingDiv.textContent = `${step.task}失败，请刷新页面重试！`;
+                    throw error;
+                }
+            }
+            document.getElementById("loading").style.display = "none";
+            document.getElementById("game-container").style.display = "block";
+        }
+
+        function startGame() {
+            if (isPlaying) {
+                alert("游戏正在进行中，请先结束游戏！");
+                return;
+            }
+
+            const range = document.getElementById("difficulty-range").value;
+            const keys = Object.keys(musicInfo).filter(key => {
+                const music = musicInfo[key];
+                if (range === "13") {
+                    return music.masds >= 13;
+                } else if (range === "13+") {
+                    return music.masds >= 13.7; // 假设 13+ 表示 13.7 及以上
+                } else if (range === "14") {
+                    return music.masds >= 14;
+                } else if (range === "14+") {
+                    return music.masds >= 14.7; // 假设 14+ 表示 14.7 及以上
+                }
+                return true; // 无限制
+            });
+
+            if (keys.length === 0) {
+                alert("没有符合条件的曲目，请选择其他范围！");
+                return;
+            }
+
+            const randomIndex = Math.floor(Math.random() * keys.length);
+            targetMusic = musicInfo[keys[randomIndex]];
+            isPlaying = true;
+            guesses = [];
+            hintsList = [];
+            guessedIds = [];
+            document.getElementById("message").innerText = "游戏开始！你一共有十次机会猜曲目，每猜一次会给出提示，提示包括标题、类型、艺术家、流派、版本、BPM、红紫谱定数、紫谱谱师、紫谱绝赞数量。绿色代表正确，定数黄色代表等级正确。";
+            document.getElementById("hints-container").innerHTML = "";
+        }
+        function searchMatches() {
+            const input = document.getElementById("guess-id").value.trim().toLowerCase();
+            const resultsContainer = document.getElementById("search-results");
+            resultsContainer.innerHTML = ""; // 清空之前的搜索结果
+
+            if (!input) {
+                resultsContainer.style.display = "none";
+                return;
+            }
+
+            const matches = Object.keys(musicInfo)
+                .filter(key => {
+                    const music = musicInfo[key];
+                    const musicAlias = music_alias[key]; 
+                    return (
+                        key.toLowerCase().includes(input) || 
+                        music.title.toLowerCase().includes(input) || 
+                        (Array.isArray(musicAlias) && musicAlias.some(alias => alias.toLowerCase().includes(input)))
+                    );
+                })
+                .map(key => {
+                    const music = musicInfo[key];
+                    return `<div style="padding: 5px; cursor: pointer;" onclick="selectMatch('${key}')">${music.title} (ID: ${key})</div>`;
+                });
+
+            if (matches.length > 0) {
+                resultsContainer.innerHTML = matches.join("");
+                resultsContainer.style.display = "block";
+            } else {
+                resultsContainer.style.display = "none";
+            }
+        }
+
+        // 点击筛选框外部时隐藏筛选框
+        document.addEventListener("click", (event) => {
+            const resultsContainer = document.getElementById("search-results");
+            const inputField = document.getElementById("guess-id");
+
+            if (!resultsContainer.contains(event.target) && event.target !== inputField) {
+                resultsContainer.style.display = "none";
+            }
+        });
+
+        function selectMatch(id) {
+            document.getElementById("guess-id").value = id;
+            document.getElementById("search-results").style.display = "none";
+        }
+        function getHint(target, guess) {
+            const versionToId = {
+                "maimai": 1, "maimai PLUS": 2, "maimai GreeN": 3, "maimai GreeN PLUS": 4,
+                "maimai ORANGE": 5, "maimai ORANGE PLUS": 6, "maimai PiNK": 7, "maimai PiNK PLUS": 8,
+                "maimai MURASAKi": 9, "maimai MURASAKi PLUS": 10, "maimai MiLK": 11, "MiLK PLUS": 12,
+                "maimai FiNALE": 13, "舞萌DX": 14, "舞萌DX2021": 15, "舞萌DX2022": 16,
+                "舞萌DX2023": 17, "舞萌DX2024": 18
+            };
+            const hints = [];
+            hints.push(`ID: ${target.id === guess.id ? "√ " : ""}${guess.id}`);
+            hints.push(`类型: ${target.type === guess.type ? "√ " : ""}${guess.type}`);
+            hints.push(`标题: ${target.title === guess.title ? "√ " : ""}${guess.title}`);
+            hints.push(`艺术家: ${target.artist === guess.artist ? "√ " : ""}${guess.artist}`);
+            hints.push(`流派: ${target.genre === guess.genre ? "√ " : ""}${guess.genre}`);
+            hints.push(`版本: ${target.version === guess.version ? "√ " : versionToId[target.version] > versionToId[guess.version] ? "→ 早了 " : "← 晚了 "}${guess.version}`);
+            hints.push(`BPM: ${target.bpm === guess.bpm ? "√ " : target.bpm > guess.bpm ? "↑ 低了 " : "↓ 高了 "}${guess.bpm}`);
+
+            // 红谱定数提示
+            let expflag = 0;
+            if (target.explevel === guess.explevel) {
+                expflag = 1;
+            }
+            if (target.expds === guess.expds) {
+                hints.push(`红谱定数: √ ${guess.expds}`);
+            } else if (target.expds > guess.expds) {
+                if (expflag === 1) {
+                    hints.push(`红谱定数: ↑ ↕低了 ${guess.expds}`);
+                } else {
+                    hints.push(`红谱定数: ↑ 低了 ${guess.expds}`);
+                }
+            } else {
+                if (expflag === 1) {
+                    hints.push(`红谱定数: ↓ ↕高了 ${guess.expds}`);
+                } else {
+                    hints.push(`红谱定数: ↓ 高了 ${guess.expds}`);
+                }
+            }
+
+            // 紫谱定数提示
+            let lvflag = 0;
+            if (target.maslevel === guess.maslevel) {
+                lvflag = 1;
+            }
+            if (target.masds === guess.masds) {
+                hints.push(`紫谱定数: √ ${guess.masds}`);
+            } else if (target.masds > guess.masds) {
+                if (lvflag === 1) {
+                    hints.push(`紫谱定数: ↑ ↕低了 ${guess.masds}`);
+                } else {
+                    hints.push(`紫谱定数: ↑ 低了 ${guess.masds}`);
+                }
+            } else {
+                if (lvflag === 1) {
+                    hints.push(`紫谱定数: ↓ ↕高了 ${guess.masds}`);
+                } else {
+                    hints.push(`紫谱定数: ↓ 高了 ${guess.masds}`);
+                }
+            }
+
+            // 紫谱谱师提示
+            if (target.mascharter === guess.mascharter) {
+                hints.push(`紫谱谱师: √ ${guess.mascharter}`);
+            } else {
+                hints.push(`紫谱谱师: ${guess.mascharter}`);
+            }
+
+            // 紫谱绝赞数量提示
+            if (target.masbreak === guess.masbreak) {
+                hints.push(`紫谱绝赞数量: √ ${guess.masbreak}`);
+            } else if (target.masbreak > guess.masbreak) {
+                hints.push(`紫谱绝赞数量: ↑ 少了 ${guess.masbreak}`);
+            } else {
+                hints.push(`紫谱绝赞数量: ↓ 多了 ${guess.masbreak}`);
+            }
+
+            return hints;
+        }
+
+        function submitGuess() {
+            if (!isPlaying) {
+                document.getElementById("message").innerText = "游戏未开始，请先开始游戏！";
+                return;
+            }
+            let guessId = document.getElementById("guess-id").value.trim();
+            if (!guessId) {
+                document.getElementById("message").innerText = "请输入曲目 ID 或别名。";
+                return;
+            }
+
+            let guessData = musicInfo[guessId];
+            if (!guessData) {
+                if (alias[guessId]) {
+                    if (alias[guessId].length > 1) {
+                        const matches = alias[guessId]
+                            .map(item => `ID: ${item.id}, 标题: ${item.name}`)
+                            .join("<br>");
+                        document.getElementById("message").innerHTML = `别名有多个匹配，请输入具体的曲目 ID：<br>${matches}`;
+                        return;
+                    } else {
+                        guessId = alias[guessId][0].id.toString();
+                        guessData = musicInfo[guessId];
+                        if (!guessData) {
+                            document.getElementById("message").innerText = "曲目不存在，请重新输入。";
+                            return;
+                        }
+                    }
+                } else {
+                    document.getElementById("message").innerText = "曲目不存在，请重新输入。";
+                    return;
+                }
+            }
+
+            if (guessedIds.includes(guessId)) {
+                document.getElementById("message").innerText = "你已经猜过这个曲目了，请重新输入。";
+                return;
+            }
+
+            guessedIds.push(guessId);
+            guesses.push(`ID: ${guessId}, 标题: ${guessData.title}`);
+            const hints = getHint(targetMusic, guessData);
+            hintsList.push(hints);
+
+            // 清空输入框
+            document.getElementById("guess-id").value = "";
+
+            if (targetMusic.title === guessData.title) {
+                isPlaying = false;
+                document.getElementById("message").innerText = "🎉 恭喜你，猜对了！🎉";
+                renderHints();
+                return;
+            }
+
+            if (guesses.length >= 10) {
+                isPlaying = false;
+                document.getElementById("message").innerText = `你已经猜错10次，游戏结束！正确答案是 ${targetMusic.id}：${targetMusic.title}`;
+                renderHints();
+                return;
+            }
+
+            document.getElementById("message").innerText = "继续猜测！";
+            renderHints();
+        }
+
+        function quitGame() {
+            if (!isPlaying) {
+                document.getElementById("message").innerText = "当前没有正在进行的游戏。";
+                return;
+            }
+            isPlaying = false;
+            document.getElementById("message").innerText = `游戏结束，正确答案是 ${targetMusic.id}：${targetMusic.title}`;
+        }
+
+        function renderHints() {
+            const hintsContainer = document.getElementById("hints-container");
+            hintsContainer.innerHTML = "";
+            hintsList.forEach((hintSet, index) => {
+                const guessBlock = document.createElement("div");
+                guessBlock.style.display = "flex";
+                guessBlock.style.flexDirection = "column";
+                guessBlock.style.marginBottom = "20px";
+
+                // 上方部分：左侧（猜测标题和第一条提示）和右侧（曲绘）
+                const topBlock = document.createElement("div");
+                topBlock.style.display = "flex";
+                topBlock.style.alignItems = "flex-start";
+
+                // 左侧部分：猜测标题和第一条提示
+                const leftBlock = document.createElement("div");
+                leftBlock.style.display = "flex";
+                leftBlock.style.flexDirection = "column";
+
+                const guessTitle = document.createElement("strong");
+                guessTitle.textContent = `猜测 ${index + 1}:`;
+                guessTitle.style.margin = "8px 0 5px 0";
+                leftBlock.appendChild(guessTitle);
+
+                [0, 1].forEach(i => {
+                    const hint = document.createElement("p");
+                    hint.style.color = hintSet[i].includes("√") ? "green" : hintSet[i].includes("↕") ? "orange" : "grey";
+                    hint.style.margin = "14px 0 0 0"; 
+                    hint.textContent = hintSet[i].replace("√", "").replace("↕", "");
+                    leftBlock.appendChild(hint);
+                });
+
+                // 右侧部分：曲绘
+                const jacketImg = document.createElement("img");
+                const guessId = guessedIds[index];
+                const jacketId = guessId % 10000; // 计算曲绘 ID
+                jacketImg.src = `https://assets2.lxns.net/maimai/jacket/${jacketId}.png`;
+                jacketImg.alt = "曲绘";
+                jacketImg.style.width = "80px";
+                jacketImg.style.height = "80px";
+                jacketImg.style.marginLeft = "10px";
+
+                // 将左侧和右侧部分组合到上方部分
+                topBlock.appendChild(leftBlock);
+                topBlock.appendChild(jacketImg);
+
+                // 下方部分：剩余的提示内容
+                const bottomBlock = document.createElement("div");
+                hintSet.slice(2).forEach(hint => {
+                    const hintLine = document.createElement("p");
+                    hintLine.style.color = hint.includes("√") ? "green" : hint.includes("↕") ? "orange" : "grey";
+                    hintLine.textContent = hint.replace("√", "").replace("↕", "");
+                    bottomBlock.appendChild(hintLine);
+                });
+
+                // 将上方部分和下方部分组合到整个块
+                guessBlock.appendChild(topBlock);
+                guessBlock.appendChild(bottomBlock);
+
+                hintsContainer.appendChild(guessBlock);
+            });
+        }
+
+        window.onload = async () => {
+            // 显示加载提示
+            const loadingDiv = document.getElementById("loading");
+            const gameContainer = document.getElementById("game-container");
+
+            try {
+                await loadGameData(); // 加载游戏数据
+                loadingDiv.style.display = "none"; // 隐藏加载提示
+                gameContainer.style.display = "block"; // 显示游戏内容
+            } catch (error) {
+                loadingDiv.textContent = "加载失败，请刷新页面重试！";
+                console.error("加载游戏数据时出错：", error);
+            }
+
+            document.getElementById("start-game").addEventListener("click", startGame);
+            document.getElementById("submit-guess").addEventListener("click", submitGuess);
+            document.getElementById("quit-game").addEventListener("click", quitGame);
+        };
+    </script>
+</head>
+<body>
+    <!-- 加载提示 -->
+    <div id="loading" style="font-size: 20px; text-align: center; margin-top: 50px;">
+        加载数据中，请稍候...
+        <div style="margin-top: 20px; width: 80%; margin-left: auto; margin-right: auto; background-color: #f3f3f3; border-radius: 5px; height: 20px; overflow: hidden;">
+            <div id="progress-bar" style="width: 0%; height: 100%; background-color: #4caf50; transition: width 0.3s;"></div>
+        </div>
+        <p id="progress-text" style="margin-top: 10px;">0%</p>
+        <p>游玩时请先点击“开始游戏”，如需自定义题库范围可以在点击“开始游戏”之前选择。</p>
+    </div>
+
+    <!-- 游戏内容 -->
+    <div id="game-container" style="display: none;">
+        <h1>Maidle 游戏</h1>
+        <div style="position: absolute; top: 10px; right: 10px;">
+            <button id="about-button" style="font-size: 16px; padding: 5px 10px;">关于</button>
+        </div>
+        <p>made by 宇航员Dale</p>
+        <div id="hints-container" style="margin-top: 20px; font-size: 16px; line-height: 0.7;"></div>
+        <div>
+            <input type="text" id="guess-id" placeholder="输入曲目id或别名" style="font-size: 18px; padding: 10px; width: 60%;" oninput="searchMatches()">
+            <div id="search-results" style="position: absolute; background: white; border: 1px solid #ccc; max-height: 200px; overflow-y: auto; display: none; z-index: 1000; width: 60%;"></div>
+        </div>
+        <div>
+            <p>提示：可以输入曲目id或别名，也可以输入部分曲名或别名后，点击搜索框中的待选曲目自动填充id。绿色代表正确，定数黄色代表等级正确。</p>
+        </div>
+        <div style="margin-top: 5px; margin-bottom: 15px;">
+            <label for="difficulty-range" style="font-size: 18px;">选择出题范围：</label>
+            <select id="difficulty-range" style="font-size: 18px; padding: 5px 5px;">
+                <option value="unlimited">无限制</option>
+                <option value="13">紫谱等级13及以上</option>
+                <option value="13+">紫谱等级13+及以上</option>
+                <option value="14">紫谱等级14及以上</option>
+                <option value="14+">紫谱等级14+及以上</option>
+            </select>
+        </div>
+        <div>
+            <button id="start-game" style="font-size: 18px; padding: 10px 20px;">开始游戏</button>
+            <button id="submit-guess" style="font-size: 18px; padding: 10px 20px;">提交猜测</button>
+            <button id="quit-game" style="font-size: 18px; padding: 10px 20px;">不玩了</button>
+        </div>
+        <p id="message"></p>
+        <p>本站总访问量：<span id="busuanzi_value_site_pv"></span> 次</p>
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+        <div id="about-modal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; border: 1px solid #ccc; border-radius: 10px; padding: 20px; z-index: 1000; width: 80%; max-width: 400px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+            <h2 style="margin-top: 0;">关于</h2>
+            <p>项目地址：<a href="https://github.com/Dale2003/maidle" target="_blank">https://github.com/Dale2003/maidle</a></p>
+            <p>致谢：</p>
+            <p>   谱面数据来源：水鱼查分器（<a href="https://www.diving-fish.com/maimaidx/prober/" target="_blank">https://www.diving-fish.com/maimaidx/prober/</a>）</p>
+            <p>   曲绘数据来源：落雪查分器（<a href="https://maimai.lxns.net" target="_blank">https://maimai.lxns.net</a>）</p>
+            <p>   别名数据来源：Yuri-YuzuChaN（<a href="https://github.com/Yuri-YuzuChaN/maimaiDX" target="_blank">https://github.com/Yuri-YuzuChaN/maimaiDX</a>）</p>
+            <button id="close-about" style="font-size: 16px; padding: 5px 10px; margin-top: 10px;">关闭</button>
+        </div>
+        
+        <div id="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 999;"></div>
+        
+        <script>
+            const aboutButton = document.getElementById("about-button");
+            const aboutModal = document.getElementById("about-modal");
+            const modalOverlay = document.getElementById("modal-overlay");
+            const closeAbout = document.getElementById("close-about");
+        
+            aboutButton.addEventListener("click", () => {
+                aboutModal.style.display = "block";
+                modalOverlay.style.display = "block";
+            });
+        
+            closeAbout.addEventListener("click", () => {
+                aboutModal.style.display = "none";
+                modalOverlay.style.display = "none";
+            });
+        
+            modalOverlay.addEventListener("click", () => {
+                aboutModal.style.display = "none";
+                modalOverlay.style.display = "none";
+            });
+        </script>
+    </div>
+</body>
+</html>
