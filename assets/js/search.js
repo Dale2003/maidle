@@ -10,27 +10,26 @@ function searchMatches() {
     }
 
     const matches = Object.keys(musicInfo)
-        .filter(key => {
-            const music = musicInfo[key];
-            const musicAlias = music_alias[key]; 
-            const Alias = musicAlias['Alias'] || []; // 确保别名存在
-            // 打印出来musicAlias
-            console.log(`musicAlias for ${key}:`, musicAlias);
-            // 检查 ID、标题和别名是否包含输入
-            for (const alias of Alias) {
-                if (alias.toLowerCase().includes(input)) {
-                    return true;
-                }
-            }
-            return (
-                key.toLowerCase().includes(input) || 
-                music.title.toLowerCase().includes(input)
-            );
-        })
-        .map(key => {
-            const music = musicInfo[key];
-            return `<div class="search-result" onclick="selectMatch('${key}')">${music.title} (ID: ${key})</div>`;
-        });
+    .filter(key => {
+        const music = musicInfo[key];
+        const aliases = music_alias[key]?.Alias || []; // 使用可选链简化逻辑
+        
+        // 获取输入的小写形式，只计算一次
+        const lowercasedInput = input.toLowerCase();
+        
+        // 检查ID和标题
+        if (key.toLowerCase().includes(lowercasedInput) || 
+            music.title.toLowerCase().includes(lowercasedInput)) {
+            return true;
+        }
+        
+        // 使用some方法检查别名，找到匹配项就立即返回
+        return aliases.some(alias => alias.toLowerCase().includes(lowercasedInput));
+    })
+    .map(key => {
+        const music = musicInfo[key];
+        return `<div class="search-result" onclick="selectMatch('${key}')">${music.title} (ID: ${key})</div>`;
+    });
 
     if (matches.length > 0) {
         resultsContainer.innerHTML = matches.join("");
