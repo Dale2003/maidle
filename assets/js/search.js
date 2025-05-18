@@ -12,23 +12,16 @@ function searchMatches() {
     const matches = Object.keys(musicInfo)
     .filter(key => {
         const music = musicInfo[key];
-        const aliases = music_alias[key]?.Alias || []; // 使用可选链简化逻辑
-        
-        // 获取输入的小写形式，只计算一次
-        const lowercasedInput = input.toLowerCase();
-        
-        // 检查ID和标题
-        if (key.toLowerCase().includes(lowercasedInput) || 
-            music.title.toLowerCase().includes(lowercasedInput)) {
-            return true;
-        }
-        
-        // 使用some方法检查别名，找到匹配项就立即返回
-        return aliases.some(alias => alias.toLowerCase().includes(lowercasedInput));
+        const musicAlias = music_alias[key]; 
+        return (
+            key.toLowerCase().includes(input) || 
+            music.title.toLowerCase().includes(input) || 
+            (Array.isArray(musicAlias) && musicAlias.some(alias => alias.toLowerCase().includes(input)))
+        );
     })
     .map(key => {
         const music = musicInfo[key];
-        return `<div class="search-result" onclick="selectMatch('${key}')">${music.title} (ID: ${key})</div>`;
+        return `<div style="padding: 5px; cursor: pointer;" onclick="selectMatch('${key}')">${music.title} (ID: ${key})</div>`;
     });
 
     if (matches.length > 0) {
