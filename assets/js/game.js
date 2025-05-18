@@ -227,7 +227,7 @@ function renderHints() {
                 hint.className = hintSet[i].includes("√") ? "hint-line hint-correct" : 
                                 hintSet[i].includes("↕") ? "hint-line hint-partial" : 
                                 "hint-line hint-incorrect";
-                hint.textContent = hintSet[i].replace("√ ", "").replace("↕ ", "");
+                hint.textContent = hintSet[i].replace("√", "").replace("↕", "");
                 leftBlock.appendChild(hint);
             }
         });
