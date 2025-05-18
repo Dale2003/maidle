@@ -1,0 +1,57 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.header, .footer {
+    background-color: #4CAF50;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+.main-content {
+    padding: 20px;
+}
+
+@media (max-width: 768px) {
+    .header, .footer {
+        padding: 15px;
+    }
+
+    .main-content {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .header, .footer {
+        padding: 10px;
+    }
+
+    .main-content {
+        padding: 10px;
+    }
+}
+
+#search-results {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+#progress-bar {
+    height: 20px;
+    background-color: #4CAF50;
+    transition: width 0.3s;
+}
+
+#progress-text {
+    margin-top: 10px;
+}

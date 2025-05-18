@@ -1,0 +1,101 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+    padding: 0;
+    color: #2c3e50;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+}
+
+.header {
+    background: #35424a;
+    color: #ffffff;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.header h1 {
+    margin: 0;
+}
+
+.navbar {
+    display: flex;
+    justify-content: center;
+    background: #2c3e50;
+}
+
+.navbar a {
+    color: #ffffff;
+    padding: 15px 20px;
+    text-decoration: none;
+    text-align: center;
+}
+
+.navbar a:hover {
+    background: #1abc9c;
+}
+
+.game-container {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.message {
+    font-size: 1.2em;
+    margin: 20px 0;
+}
+
+.hints-container {
+    background: #ecf0f1;
+    padding: 15px;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.progress-bar {
+    background-color: #4caf50;
+    height: 20px;
+    border-radius: 5px;
+    transition: width 0.3s;
+}
+
+#progress-text {
+    margin-top: 10px;
+}
+
+.footer {
+    text-align: center;
+    padding: 20px 0;
+    background: #35424a;
+    color: #ffffff;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 95%;
+    }
+
+    .navbar {
+        flex-direction: column;
+    }
+
+    .navbar a {
+        padding: 10px;
+    }
+}
