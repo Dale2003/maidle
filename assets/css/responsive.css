@@ -54,6 +54,7 @@
     #search-results {
         left: 0;
         width: 100%;
+        transform: none;  /* 添加这一行重置transform属性 */
     }
     
     .guess-top {
