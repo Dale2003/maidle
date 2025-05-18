@@ -1,14 +1,14 @@
 // 全局变量
-let musicInfo = {};
-let alias = {};
-let music_alias = {};
-let targetMusic = null;
-let isPlaying = false;
-let guesses = [];
-let hintsList = [];
-let guessedIds = [];
+let musicInfo = {};  // 存储音乐信息
+let alias = {};      // 存储别名信息
+let music_alias = {}; // 存储音乐别名
+let targetMusic = null; // 目标音乐
+let isPlaying = false;  // 游戏状态
+let guesses = [];       // 猜测历史
+let hintsList = [];     // 提示列表
+let guessedIds = [];    // 已猜测的ID
 
-// 版本转ID映射
+// 版本ID映射
 const versionToId = {
     "maimai": 1, "maimai PLUS": 2, "maimai GreeN": 3, "maimai GreeN PLUS": 4,
     "maimai ORANGE": 5, "maimai ORANGE PLUS": 6, "maimai PiNK": 7, "maimai PiNK PLUS": 8,
@@ -23,11 +23,11 @@ async function loadGameData() {
     const progressBar = document.getElementById("progress-bar");
     const progressText = document.getElementById("progress-text");
 
-    // 模拟加载数据的分步进度
+    // 加载数据的分步进度
     const steps = [
         { task: "加载音乐信息", fetch: fetch("data/music_info.json") },
         { task: "加载别名信息", fetch: fetch("data/alias.json") },
-        { task: "加载其他数据", fetch: fetch("data/music_alias.json") } 
+        { task: "加载音乐别名", fetch: fetch("data/music_alias.json") }
     ];
 
     let progress = 0;
@@ -40,7 +40,7 @@ async function loadGameData() {
                 musicInfo = await response.json();
             } else if (step.task === "加载别名信息") {
                 alias = await response.json();
-            } else if (step.task === "加载其他数据") {
+            } else if (step.task === "加载音乐别名") {
                 music_alias = await response.json();
             }
             progress += stepIncrement;
@@ -75,6 +75,9 @@ window.onload = async () => {
     document.getElementById("start-game").addEventListener("click", startGame);
     document.getElementById("submit-guess").addEventListener("click", submitGuess);
     document.getElementById("quit-game").addEventListener("click", quitGame);
+    
+    // 初始化搜索功能
+    document.getElementById("guess-id").addEventListener("input", searchMatches);
     
     // 初始化关于模态框
     const aboutButton = document.getElementById("about-button");

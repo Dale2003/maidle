@@ -7,9 +7,6 @@
     <link rel="stylesheet" href="assets/css/main.css">
     <link rel="stylesheet" href="assets/css/responsive.css">
     <link rel="icon" href="assets/img/favicon.ico" type="image/x-icon">
-    <script src="assets/js/app.js" defer></script>
-    <script src="assets/js/game.js" defer></script>
-    <script src="assets/js/search.js" defer></script>
 </head>
 <body>
     <header>
@@ -18,38 +15,82 @@
         </div>
         <nav>
             <ul>
-                <li><a href="#about">关于</a></li>
-                <li><a href="#game">游戏</a></li>
+                <li><a href="#" id="about-button">关于</a></li>
+                <li><a href="https://github.com/Dale2003/maidle" target="_blank">GitHub</a></li>
             </ul>
         </nav>
     </header>
     <main>
+        <!-- 加载提示 -->
         <section id="loading">
             <h1>加载中...</h1>
             <div id="progress-container">
                 <div id="progress-bar"></div>
-                <p id="progress-text">0%</p>
             </div>
+            <p id="progress-text">0%</p>
+            <p>游玩时请先点击"开始游戏"，如需自定义题库范围可以在点击"开始游戏"之前选择。</p>
         </section>
+        
+        <!-- 游戏内容 -->
         <section id="game-container" style="display: none;">
             <h1>Maidle 游戏</h1>
-            <div id="message"></div>
-            <input type="text" id="guess-id" placeholder="输入曲目 ID 或别名">
-            <div id="search-results"></div>
-            <button id="start-game">开始游戏</button>
+            <p>made by 宇航员Dale</p>
+            
+            <!-- 难度选择 -->
+            <div id="difficulty-selection">
+                <label for="difficulty-range">选择出题范围：</label>
+                <select id="difficulty-range">
+                    <option value="unlimited">无限制</option>
+                    <option value="13">紫谱等级13及以上</option>
+                    <option value="13+">紫谱等级13+及以上</option>
+                    <option value="14">紫谱等级14及以上</option>
+                    <option value="14+">紫谱等级14+及以上</option>
+                </select>
+            </div>
+            
+            <!-- 游戏控制 -->
+            <div class="game-controls">
+                <button id="start-game">开始游戏</button>
+                <button id="submit-guess">提交猜测</button>
+                <button id="quit-game">不玩了</button>
+            </div>
+            
+            <!-- 提示消息 -->
+            <div id="message">
+                <p>提示：可以输入曲目id或别名，也可以输入部分曲名或别名后，点击搜索框中的待选曲目自动填充id。绿色代表正确，定数黄色代表等级正确。</p>
+            </div>
+            
+            <!-- 搜索区域 -->
+            <div class="input-area">
+                <input type="text" id="guess-id" placeholder="输入曲目 ID 或别名">
+                <div id="search-results"></div>
+            </div>
+            
+            <!-- 提示容器 -->
             <div id="hints-container"></div>
         </section>
+        
+        <!-- 关于模态框 -->
         <section id="about-modal" style="display: none;">
             <h2>关于</h2>
             <p>项目地址：<a href="https://github.com/Dale2003/maidle" target="_blank">https://github.com/Dale2003/maidle</a></p>
-            <p>提示：可以输入曲目id或别名，也可以输入部分曲名或别名后，点击搜索框中的待选曲目自动填充id。绿色代表正确，定数黄色代表等级正确。</p>
+            <p>致谢：</p>
+            <p>谱面数据来源：水鱼查分器（<a href="https://www.diving-fish.com/maimaidx/prober/" target="_blank">https://www.diving-fish.com/maimaidx/prober/</a>）</p>
+            <p>曲绘数据来源：落雪查分器（<a href="https://maimai.lxns.net" target="_blank">https://maimai.lxns.net</a>）</p>
+            <p>别名数据来源：Yuri-YuzuChaN（<a href="https://github.com/Yuri-YuzuChaN/maimaiDX" target="_blank">https://github.com/Yuri-YuzuChaN/maimaiDX</a>）</p>
             <button id="close-about">关闭</button>
         </section>
+        <div id="modal-overlay" style="display: none;"></div>
     </main>
     <footer>
         <p>谱面数据来源：水鱼查分器（<a href="https://www.diving-fish.com/maimaidx/prober/" target="_blank">https://www.diving-fish.com/maimaidx/prober/</a>）</p>
         <p>曲绘数据来源：落雪查分器（<a href="https://maimai.lxns.net" target="_blank">https://maimai.lxns.net</a>）</p>
         <p>别名数据来源：Yuri-YuzuChaN（<a href="https://github.com/Yuri-YuzuChaN/maimaiDX" target="_blank">https://github.com/Yuri-YuzuChaN/maimaiDX</a>）</p>
     </footer>
+    
+    <!-- JavaScript文件 -->
+    <script src="assets/js/app.js"></script>
+    <script src="assets/js/game.js"></script>
+    <script src="assets/js/search.js"></script>
 </body>
 </html>
