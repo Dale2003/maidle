@@ -13,7 +13,8 @@ function searchMatches() {
         .filter(key => {
             const music = musicInfo[key];
             const musicAlias = music_alias[key]; 
-            printf("key: %s, music: %s, musicAlias: %s\n", key, music, musicAlias);
+            // 打印出来musicAlias
+            console.log(`musicAlias for ${key}:`, musicAlias);
             // 检查 ID、标题和别名是否包含输入
             return (
                 key.toLowerCase().includes(input) || 
