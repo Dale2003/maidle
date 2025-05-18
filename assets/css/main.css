@@ -405,7 +405,7 @@ footer p {
 
 .author {
     margin: 0 0 0 1rem;
-    font-style: italic;
+    /* font-style: italic; */
     color: var(--dark-gray);
 }
 
