@@ -12,14 +12,19 @@ function startGame() {
     const range = document.getElementById("difficulty-range").value;
     const keys = Object.keys(musicInfo).filter(key => {
         const music = musicInfo[key];
+        // 确保charts和master属性存在（紫谱）
+        if (!music.charts || !music.charts.master) {
+            return false;
+        }
+        
         if (range === "13") {
-            return music.charts.expert.level >= 13.0;
+            return music.charts.master.level >= 13.0;
         } else if (range === "13+") {
-            return music.charts.expert.level >= 13.7;
+            return music.charts.master.level >= 13.7;
         } else if (range === "14") {
-            return music.charts.expert.level >= 14.0;
+            return music.charts.master.level >= 14.0;
         } else if (range === "14+") {
-            return music.charts.expert.level >= 14.7;
+            return music.charts.master.level >= 14.7;
         }
         return true; // 无限制
     });
@@ -110,6 +115,11 @@ function submitGuess() {
 
 // 获取提示信息
 function getHint(target, guess) {
+    if (!target || !guess) {
+        console.error("Missing target or guess object");
+        return ["错误: 数据缺失"];
+    }
+
     const hints = [];
     
     // 基本信息提示
@@ -121,58 +131,61 @@ function getHint(target, guess) {
     hints.push(`版本: ${target.version === guess.version ? "√ " : versionToId[target.version] > versionToId[guess.version] ? "→ 早了 " : "← 晚了 "}${guess.version}`);
     hints.push(`BPM: ${target.bpm === guess.bpm ? "√ " : target.bpm > guess.bpm ? "↑ 低了 " : "↓ 高了 "}${guess.bpm}`);
 
-    // 红谱定数提示
+    // 红谱(Expert)定数提示
     let expflag = 0;
-    if (target.charts.master && guess.charts.master) {
-        if (target.charts.master.level === guess.charts.master.level) {
-            expflag = 1;
-        }
-        
-        if (target.charts.master.level === guess.charts.master.level) {
-            hints.push(`红谱等级: ${expflag ? "↕ " : "√ "}${guess.charts.master.level}`);
-        } else if (target.charts.master.level > guess.charts.master.level) {
-            hints.push(`红谱等级: ${expflag ? "↑ ↕低了 " : "↑ 低了 "}${guess.charts.master.level}`);
-        } else {
-            hints.push(`红谱等级: ${expflag ? "↓ ↕高了 " : "↓ 高了 "}${guess.charts.master.level}`);
-        }
-    } else {
-        if (target.charts.master && !guess.charts.master) {
-            hints.push(`红谱等级: ↑ 没有红谱`);
-        } else if (!target.charts.master && guess.charts.master) {
-            hints.push(`红谱等级: ↓ ${guess.charts.master.level}`);
-        } else {
-            hints.push(`红谱等级: √ 没有红谱`);
-        }
-    }
-
-    // 紫谱定数提示
-    let lvflag = 0;
-    if (target.charts.expert.level === guess.charts.expert.level) {
-        lvflag = 1;
-    }
+    const targetHasExpert = target.charts && target.charts.expert;
+    const guessHasExpert = guess.charts && guess.charts.expert;
     
-    if (target.charts.expert.level === guess.charts.expert.level) {
-        hints.push(`紫谱等级: ${lvflag ? "↕ " : "√ "}${guess.charts.expert.level}`);
-    } else if (target.charts.expert.level > guess.charts.expert.level) {
-        hints.push(`紫谱等级: ${lvflag ? "↑ ↕低了 " : "↑ 低了 "}${guess.charts.expert.level}`);
+    if (targetHasExpert && guessHasExpert) {
+        if (target.charts.expert.level === guess.charts.expert.level) {
+            expflag = 1;
+            hints.push(`红谱等级: ${expflag ? "↕ " : "√ "}${guess.charts.expert.level}`);
+        } else {
+            hints.push(`红谱等级: ${target.charts.expert.level > guess.charts.expert.level ? "↑ 低了 " : "↓ 高了 "}${guess.charts.expert.level}`);
+        }
+    } else if (targetHasExpert && !guessHasExpert) {
+        hints.push(`红谱等级: ↑ 没有红谱`);
+    } else if (!targetHasExpert && guessHasExpert) {
+        hints.push(`红谱等级: ↓ ${guess.charts.expert.level}`);
     } else {
-        hints.push(`紫谱等级: ${lvflag ? "↓ ↕高了 " : "↓ 高了 "}${guess.charts.expert.level}`);
+        hints.push(`红谱等级: √ 没有红谱`);
+        expflag = 1;
     }
 
-    // 紫谱谱师提示
-    if (target.charts.expert.charter === guess.charts.expert.charter) {
-        hints.push(`紫谱谱师: √ ${guess.charts.expert.charter}`);
-    } else {
-        hints.push(`紫谱谱师: ${guess.charts.expert.charter}`);
-    }
+    // 紫谱(Master)定数提示
+    let lvflag = 0;
+    const targetHasMaster = target.charts && target.charts.master;
+    const guessHasMaster = guess.charts && guess.charts.master;
+    
+    if (targetHasMaster && guessHasMaster) {
+        if (target.charts.master.level === guess.charts.master.level) {
+            lvflag = 1;
+            hints.push(`紫谱等级: ${lvflag ? "↕ " : "√ "}${guess.charts.master.level}`);
+        } else if (target.charts.master.level > guess.charts.master.level) {
+            hints.push(`紫谱等级: ${lvflag ? "↑ ↕低了 " : "↑ 低了 "}${guess.charts.master.level}`);
+        } else {
+            hints.push(`紫谱等级: ${lvflag ? "↓ ↕高了 " : "↓ 高了 "}${guess.charts.master.level}`);
+        }
 
-    // 紫谱绝赞数量提示
-    if (target.charts.expert.silverCount === guess.charts.expert.silverCount) {
-        hints.push(`紫谱绝赞数量: √ ${guess.charts.expert.silverCount}`);
-    } else if (target.charts.expert.silverCount > guess.charts.expert.silverCount) {
-        hints.push(`紫谱绝赞数量: ↑ 少了 ${guess.charts.expert.silverCount}`);
+        // 紫谱谱师提示
+        if (target.charts.master.charter === guess.charts.master.charter) {
+            hints.push(`紫谱谱师: √ ${guess.charts.master.charter}`);
+        } else {
+            hints.push(`紫谱谱师: ${guess.charts.master.charter}`);
+        }
+
+        // 紫谱绝赞数量提示
+        if (target.charts.master.silverCount === guess.charts.master.silverCount) {
+            hints.push(`紫谱绝赞数量: √ ${guess.charts.master.silverCount}`);
+        } else if (target.charts.master.silverCount > guess.charts.master.silverCount) {
+            hints.push(`紫谱绝赞数量: ↑ 少了 ${guess.charts.master.silverCount}`);
+        } else {
+            hints.push(`紫谱绝赞数量: ↓ 多了 ${guess.charts.master.silverCount}`);
+        }
     } else {
-        hints.push(`紫谱绝赞数量: ↓ 多了 ${guess.charts.expert.silverCount}`);
+        hints.push(`紫谱等级: 数据缺失`);
+        hints.push(`紫谱谱师: 数据缺失`);
+        hints.push(`紫谱绝赞数量: 数据缺失`);
     }
 
     return hints;
