@@ -9,18 +9,18 @@ function searchMatches() {
         return;
     }
 
-    const matches = Object.keys(musicInfo)
+    const matches = Object.keys(music_alias)
     .filter(key => {
-        const music = musicInfo[key];
-        const musicAlias = music_alias[key]; 
+        const music = music_alias[key];
+        const aliases = music.alias || [];
         return (
-            key.toLowerCase().includes(input) || 
-            music.title.toLowerCase().includes(input) || 
-            (Array.isArray(musicAlias) && musicAlias.some(alias => alias.toLowerCase().includes(input)))
+            key.toLowerCase().includes(input) ||
+            music.title.toLowerCase().includes(input) ||
+            aliases.some(alias => alias.toLowerCase().includes(input))
         );
     })
     .map(key => {
-        const music = musicInfo[key];
+        const music = music_alias[key];
         return `<div style="padding: 5px; cursor: pointer;" onclick="selectMatch('${key}')">${music.title} (ID: ${key})</div>`;
     });
 
