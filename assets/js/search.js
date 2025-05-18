@@ -13,13 +13,18 @@ function searchMatches() {
         .filter(key => {
             const music = musicInfo[key];
             const musicAlias = music_alias[key]; 
+            const Alias = musicAlias.alias || []; // 确保别名存在
             // 打印出来musicAlias
             console.log(`musicAlias for ${key}:`, musicAlias);
             // 检查 ID、标题和别名是否包含输入
+            for (const alias of Alias) {
+                if (alias.toLowerCase().includes(input)) {
+                    return true;
+                }
+            }
             return (
                 key.toLowerCase().includes(input) || 
-                music.title.toLowerCase().includes(input) || 
-                (Array.isArray(musicAlias) && musicAlias.some(alias => alias.toLowerCase().includes(input)))
+                music.title.toLowerCase().includes(input)
             );
         })
         .map(key => {
