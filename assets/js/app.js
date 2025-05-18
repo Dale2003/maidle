@@ -27,7 +27,7 @@ async function loadGameData() {
     const steps = [
         { task: "加载音乐信息", fetch: fetch("data/music_info.json") },
         { task: "加载别名信息", fetch: fetch("data/alias.json") },
-        { task: "加载音乐别名", fetch: fetch("data/music_alias.json") }
+        { task: "加载音乐别名", fetch: fetch("data/all_data.json") }
     ];
 
     let progress = 0;
