@@ -193,12 +193,19 @@ function getHint(target, guess) {
     return hints;
 }
 
-// 渲染提示
+// 修改渲染提示函数，改为倒序显示
 function renderHints() {
     const hintsContainer = document.getElementById("hints-container");
     hintsContainer.innerHTML = "";
     
-    hintsList.forEach((hintSet, index) => {
+    // 创建一个副本并倒序，这样最新的猜测会显示在顶部
+    const hintsReversed = [...hintsList].reverse();
+    const guessedIdsReversed = [...guessedIds].reverse();
+    
+    hintsReversed.forEach((hintSet, reversedIndex) => {
+        // 计算原始索引，用于显示正确的猜测编号
+        const originalIndex = hintsList.length - reversedIndex - 1;
+        
         const guessBlock = document.createElement("div");
         guessBlock.className = "guess-block";
 
@@ -212,7 +219,7 @@ function renderHints() {
 
         const guessTitle = document.createElement("strong");
         guessTitle.className = "guess-title";
-        guessTitle.textContent = `猜测 ${index + 1}:`;
+        guessTitle.textContent = `猜测 ${originalIndex + 1}:`;
         leftBlock.appendChild(guessTitle);
 
         [0, 1].forEach(i => {
@@ -229,7 +236,7 @@ function renderHints() {
         // 右侧部分：曲绘
         const jacketImg = document.createElement("img");
         jacketImg.className = "jacket-img";
-        const guessId = guessedIds[index];
+        const guessId = guessedIdsReversed[reversedIndex];
         const jacketId = guessId % 10000; // 计算曲绘 ID
         jacketImg.src = `https://assets2.lxns.net/maimai/jacket/${jacketId}.png`;
         jacketImg.alt = "曲绘";

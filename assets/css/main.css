@@ -54,15 +54,41 @@ header {
 nav ul {
     display: flex;
     list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
 nav ul li {
-    margin-left: 1.5rem;
+    margin-left: 1rem;
 }
 
-nav ul li a {
-    color: var(--text-color);
-    font-weight: 500;
+/* 添加导航按钮通用样式 */
+.nav-button {
+    font-size: 1.1rem;
+    padding: 0.7rem 1.5rem;
+    border: none;
+    border-radius: var(--border-radius);
+    background-color: var(--primary-color);
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    box-shadow: var(--shadow);
+    text-decoration: none;
+    display: inline-block;
+}
+
+.nav-button:hover {
+    background-color: #3d9c40;
+    transform: translateY(-2px);
+    text-decoration: none;
+}
+
+.nav-button.secondary {
+    background-color: var(--secondary-color);
+}
+
+.nav-button.secondary:hover {
+    background-color: #1a7fd1;
 }
 
 /* 主要内容区域 */
@@ -122,11 +148,14 @@ main {
     margin-bottom: 1.5rem;
 }
 
-/* 游戏控制区 */
+/* 游戏控制区修改为水平排列 */
 .game-controls {
     margin: 1.5rem 0;
     display: flex;
-    flex-direction: column;
+    /* 修改为水平排列 */
+    flex-direction: row;
+    /* 居中对齐 */
+    justify-content: center;
     align-items: center;
 }
 
@@ -176,17 +205,9 @@ button:active {
     transform: translateY(0);
 }
 
+/* 移除旧的关于按钮特殊样式 */
 #about-button {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    font-size: 0.9rem;
-    padding: 0.4rem 0.8rem;
-    background-color: var(--secondary-color);
-}
-
-#about-button:hover {
-    background-color: #1a7fd1;
+    /* 移除这些特殊样式 */
 }
 
 /* 搜索和输入区域 */
@@ -367,4 +388,35 @@ footer {
 footer p {
     margin: 0.5rem 0;
     font-size: 0.9rem;
+}
+
+/* 添加标题容器样式 */
+.title-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.title-container h1 {
+    margin: 0;
+    color: var(--primary-color);
+}
+
+.author {
+    margin: 0 0 0 1rem;
+    font-style: italic;
+    color: var(--dark-gray);
+}
+
+/* 响应式调整 */
+@media screen and (max-width: 480px) {
+    .title-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .author {
+        margin: 0.5rem 0 0 0;
+    }
 }
