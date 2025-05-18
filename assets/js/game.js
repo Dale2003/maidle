@@ -12,19 +12,19 @@ function startGame() {
     const range = document.getElementById("difficulty-range").value;
     const keys = Object.keys(musicInfo).filter(key => {
         const music = musicInfo[key];
-        // 确保charts和master属性存在（紫谱）
-        if (!music.charts || !music.charts.master) {
+        // 确保masds属性存在（紫谱定数）
+        if (music.masds === undefined) {
             return false;
         }
         
         if (range === "13") {
-            return music.charts.master.level >= 13.0;
+            return music.masds >= 13.0;
         } else if (range === "13+") {
-            return music.charts.master.level >= 13.7;
+            return music.masds >= 13.7;
         } else if (range === "14") {
-            return music.charts.master.level >= 14.0;
+            return music.masds >= 14.0;
         } else if (range === "14+") {
-            return music.charts.master.level >= 14.7;
+            return music.masds >= 14.7;
         }
         return true; // 无限制
     });
@@ -133,59 +133,61 @@ function getHint(target, guess) {
 
     // 红谱(Expert)定数提示
     let expflag = 0;
-    const targetHasExpert = target.charts && target.charts.expert;
-    const guessHasExpert = guess.charts && guess.charts.expert;
-    
-    if (targetHasExpert && guessHasExpert) {
-        if (target.charts.expert.level === guess.charts.expert.level) {
+    if (target.expds !== undefined && guess.expds !== undefined) {
+        if (target.expds === guess.expds) {
             expflag = 1;
-            hints.push(`红谱等级: ${expflag ? "↕ " : "√ "}${guess.charts.expert.level}`);
+            hints.push(`红谱定数: ${expflag ? "↕ " : "√ "}${guess.expds}`);
         } else {
-            hints.push(`红谱等级: ${target.charts.expert.level > guess.charts.expert.level ? "↑ 低了 " : "↓ 高了 "}${guess.charts.expert.level}`);
+            hints.push(`红谱定数: ${target.expds > guess.expds ? "↑ 低了 " : "↓ 高了 "}${guess.expds}`);
         }
-    } else if (targetHasExpert && !guessHasExpert) {
-        hints.push(`红谱等级: ↑ 没有红谱`);
-    } else if (!targetHasExpert && guessHasExpert) {
-        hints.push(`红谱等级: ↓ ${guess.charts.expert.level}`);
+    } else if (target.expds !== undefined && guess.expds === undefined) {
+        hints.push(`红谱定数: ↑ 没有红谱`);
+    } else if (target.expds === undefined && guess.expds !== undefined) {
+        hints.push(`红谱定数: ↓ ${guess.expds}`);
     } else {
-        hints.push(`红谱等级: √ 没有红谱`);
+        hints.push(`红谱定数: √ 没有红谱`);
         expflag = 1;
     }
 
     // 紫谱(Master)定数提示
     let lvflag = 0;
-    const targetHasMaster = target.charts && target.charts.master;
-    const guessHasMaster = guess.charts && guess.charts.master;
-    
-    if (targetHasMaster && guessHasMaster) {
-        if (target.charts.master.level === guess.charts.master.level) {
+    if (target.masds !== undefined && guess.masds !== undefined) {
+        if (target.masds === guess.masds) {
             lvflag = 1;
-            hints.push(`紫谱等级: ${lvflag ? "↕ " : "√ "}${guess.charts.master.level}`);
-        } else if (target.charts.master.level > guess.charts.master.level) {
-            hints.push(`紫谱等级: ${lvflag ? "↑ ↕低了 " : "↑ 低了 "}${guess.charts.master.level}`);
+            hints.push(`紫谱定数: ${lvflag ? "↕ " : "√ "}${guess.masds}`);
+        } else if (target.masds > guess.masds) {
+            hints.push(`紫谱定数: ${lvflag ? "↑ ↕低了 " : "↑ 低了 "}${guess.masds}`);
         } else {
-            hints.push(`紫谱等级: ${lvflag ? "↓ ↕高了 " : "↓ 高了 "}${guess.charts.master.level}`);
+            hints.push(`紫谱定数: ${lvflag ? "↓ ↕高了 " : "↓ 高了 "}${guess.masds}`);
+        }
+
+        // 紫谱等级提示
+        if (target.maslevel === guess.maslevel) {
+            hints.push(`紫谱等级: √ ${guess.maslevel}`);
+        } else {
+            hints.push(`紫谱等级: ${parseFloat(target.maslevel) > parseFloat(guess.maslevel) ? "↑ 低了 " : "↓ 高了 "}${guess.maslevel}`);
         }
 
         // 紫谱谱师提示
-        if (target.charts.master.charter === guess.charts.master.charter) {
-            hints.push(`紫谱谱师: √ ${guess.charts.master.charter}`);
+        if (target.mascharter === guess.mascharter) {
+            hints.push(`紫谱谱师: √ ${guess.mascharter}`);
         } else {
-            hints.push(`紫谱谱师: ${guess.charts.master.charter}`);
+            hints.push(`紫谱谱师: ${guess.mascharter}`);
         }
 
-        // 紫谱绝赞数量提示
-        if (target.charts.master.silverCount === guess.charts.master.silverCount) {
-            hints.push(`紫谱绝赞数量: √ ${guess.charts.master.silverCount}`);
-        } else if (target.charts.master.silverCount > guess.charts.master.silverCount) {
-            hints.push(`紫谱绝赞数量: ↑ 少了 ${guess.charts.master.silverCount}`);
+        // 紫谱Break数量提示
+        if (target.masbreak === guess.masbreak) {
+            hints.push(`紫谱Break数: √ ${guess.masbreak}`);
+        } else if (target.masbreak > guess.masbreak) {
+            hints.push(`紫谱Break数: ↑ 少了 ${guess.masbreak}`);
         } else {
-            hints.push(`紫谱绝赞数量: ↓ 多了 ${guess.charts.master.silverCount}`);
+            hints.push(`紫谱Break数: ↓ 多了 ${guess.masbreak}`);
         }
     } else {
+        hints.push(`紫谱定数: 数据缺失`);
         hints.push(`紫谱等级: 数据缺失`);
         hints.push(`紫谱谱师: 数据缺失`);
-        hints.push(`紫谱绝赞数量: 数据缺失`);
+        hints.push(`紫谱Break数: 数据缺失`);
     }
 
     return hints;
