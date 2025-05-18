@@ -1,101 +1,369 @@
+/* 基础样式 */
+:root {
+    --primary-color: #4caf50;
+    --secondary-color: #2196f3;
+    --text-color: #333;
+    --light-gray: #f3f3f3;
+    --medium-gray: #ccc;
+    --dark-gray: #666;
+    --correct-color: #4caf50;
+    --partial-color: #ff9800;
+    --incorrect-color: #757575;
+    --shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    --border-radius: 8px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: #f9f9f9;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
-    color: #333;
 }
 
-h1, h2, h3, h4, h5, h6 {
-    margin: 0;
-    padding: 0;
-    color: #2c3e50;
-}
-
-.container {
-    width: 80%;
-    margin: auto;
-    overflow: hidden;
-}
-
-.header {
-    background: #35424a;
-    color: #ffffff;
-    padding: 20px 0;
-    text-align: center;
-}
-
-.header h1 {
-    margin: 0;
-}
-
-.navbar {
-    display: flex;
-    justify-content: center;
-    background: #2c3e50;
-}
-
-.navbar a {
-    color: #ffffff;
-    padding: 15px 20px;
+a {
+    color: var(--secondary-color);
     text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* 头部样式 */
+header {
+    background-color: white;
+    box-shadow: var(--shadow);
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo img {
+    height: 40px;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+}
+
+nav ul li {
+    margin-left: 1.5rem;
+}
+
+nav ul li a {
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+/* 主要内容区域 */
+main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+/* 加载屏幕 */
+#loading {
     text-align: center;
+    padding: 2rem;
 }
 
-.navbar a:hover {
-    background: #1abc9c;
+#loading h1 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: var(--primary-color);
 }
 
-.game-container {
-    background: #ffffff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.message {
-    font-size: 1.2em;
-    margin: 20px 0;
-}
-
-.hints-container {
-    background: #ecf0f1;
-    padding: 15px;
-    border-radius: 5px;
-    margin-top: 10px;
-}
-
-.progress-bar {
-    background-color: #4caf50;
+#progress-container {
+    width: 80%;
+    margin: 0 auto;
+    background-color: var(--light-gray);
+    border-radius: var(--border-radius);
     height: 20px;
-    border-radius: 5px;
-    transition: width 0.3s;
+    overflow: hidden;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+#progress-bar {
+    width: 0%;
+    height: 100%;
+    background-color: var(--primary-color);
+    transition: width 0.3s ease;
 }
 
 #progress-text {
     margin-top: 10px;
+    font-weight: bold;
+    color: var(--dark-gray);
 }
 
-.footer {
-    text-align: center;
-    padding: 20px 0;
-    background: #35424a;
-    color: #ffffff;
+/* 游戏容器 */
+#game-container {
+    background-color: white;
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    box-shadow: var(--shadow);
     position: relative;
-    bottom: 0;
+}
+
+#game-container h1 {
+    text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+}
+
+/* 游戏控制区 */
+.game-controls {
+    margin: 1.5rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#difficulty-selection {
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+#difficulty-selection select {
+    font-size: 1.1rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--medium-gray);
+    border-radius: var(--border-radius);
+    background-color: white;
+}
+
+#message {
+    background-color: var(--light-gray);
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    margin: 1rem 0;
+    color: var(--text-color);
+    text-align: center;
+    min-height: 60px;
+}
+
+/* 按钮样式 */
+button {
+    font-size: 1.1rem;
+    padding: 0.7rem 1.5rem;
+    margin: 0.5rem;
+    border: none;
+    border-radius: var(--border-radius);
+    background-color: var(--primary-color);
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    box-shadow: var(--shadow);
+}
+
+button:hover {
+    background-color: #3d9c40;
+    transform: translateY(-2px);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+#about-button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 0.9rem;
+    padding: 0.4rem 0.8rem;
+    background-color: var(--secondary-color);
+}
+
+#about-button:hover {
+    background-color: #1a7fd1;
+}
+
+/* 搜索和输入区域 */
+.input-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 1.5rem 0;
+    position: relative;
     width: 100%;
 }
 
-@media (max-width: 768px) {
-    .container {
-        width: 95%;
-    }
+#guess-id {
+    font-size: 1.1rem;
+    padding: 0.8rem;
+    width: 80%;
+    max-width: 500px;
+    border: 2px solid var(--medium-gray);
+    border-radius: var(--border-radius);
+    margin-bottom: 0.5rem;
+}
 
-    .navbar {
-        flex-direction: column;
-    }
+#guess-id:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+}
 
-    .navbar a {
-        padding: 10px;
-    }
+#search-results {
+    position: absolute;
+    top: 100%;
+    left: 10%;
+    width: 80%;
+    max-width: 500px;
+    background: white;
+    border: 1px solid var(--medium-gray);
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+    max-height: 200px;
+    overflow-y: auto;
+    display: none;
+    z-index: 1000;
+    box-shadow: var(--shadow);
+}
+
+.search-result {
+    padding: 0.7rem;
+    cursor: pointer;
+    border-bottom: 1px solid var(--light-gray);
+}
+
+.search-result:hover {
+    background-color: var(--light-gray);
+}
+
+/* 提示容器 */
+#hints-container {
+    margin-top: 2rem;
+    padding: 1rem;
+    background-color: var(--light-gray);
+    border-radius: var(--border-radius);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* 关于模态框 */
+#about-modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    z-index: 1100;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+#about-modal h2 {
+    color: var(--primary-color);
+    margin-top: 0;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid var(--light-gray);
+    padding-bottom: 0.5rem;
+}
+
+#about-modal p {
+    margin-bottom: 0.8rem;
+}
+
+#close-about {
+    background-color: var(--secondary-color);
+    margin-top: 1rem;
+}
+
+#modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+/* 猜测提示样式 */
+.guess-block {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.5rem;
+    background-color: white;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+}
+
+.guess-top {
+    display: flex;
+    align-items: flex-start;
+    padding: 1rem;
+    border-bottom: 1px solid var(--light-gray);
+}
+
+.guess-left {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.guess-title {
+    font-weight: bold;
+    margin-bottom: 0.8rem;
+    color: var(--dark-gray);
+}
+
+.jacket-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 6px;
+    margin-left: 1rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.guess-bottom {
+    padding: 1rem;
+}
+
+.hint-line {
+    margin: 0.4rem 0;
+    padding: 0.2rem 0;
+}
+
+.hint-correct {
+    color: var(--correct-color);
+}
+
+.hint-partial {
+    color: var(--partial-color);
+}
+
+.hint-incorrect {
+    color: var(--incorrect-color);
+}
+
+/* 页脚 */
+footer {
+    background-color: var(--light-gray);
+    color: var(--dark-gray);
+    text-align: center;
+    padding: 1.5rem;
+    margin-top: 3rem;
+    border-top: 1px solid var(--medium-gray);
+}
+
+footer p {
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
 }
