@@ -51,11 +51,4 @@ document.addEventListener("click", (event) => {
 function selectMatch(id) {
     document.getElementById("guess-id").value = id;
     document.getElementById("search-results").style.display = "none";
-    // 显示猜测提示框
-    document.getElementById("hints-container").style.display = "block";
 }
-
-// 初始化时隐藏猜测提示框
-document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("hints-container").style.display = "none";
-});
