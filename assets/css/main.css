@@ -774,6 +774,23 @@ footer a:hover {
 }
 
 .author {
-    margin: 0 0 0 0rem;
-    /* font-style: italic; */
+    margin: 0 0 0 1.2rem;
+    color: var(--dark-gray);
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding-left: 1.2rem;
+}
+
+.author::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 70%;
+    width: 1px;
+    background-color: var(--dark-gray);
+    opacity: 0.5;
 }
