@@ -3,6 +3,9 @@
     <!-- 背景圆形 -->
     <circle cx="60" cy="60" r="58" fill="url(#gradient)" stroke="white" stroke-width="4"/>
     
+    <!-- 文字 -->
+    <text x="60" y="75" font-family="Arial, sans-serif" font-size="36" font-weight="bold" fill="white" text-anchor="middle">maidle</text>
+    
     <!-- 音符图案 -->
     <path d="M45 35C45 35 45 45 45 50C45 55 50 60 55 60C60 60 65 55 65 50C65 45 60 40 55 40C50 40 45 45 45 50" stroke="white" stroke-width="4" stroke-linecap="round"/>
     <path d="M55 60V85" stroke="white" stroke-width="4" stroke-linecap="round"/>

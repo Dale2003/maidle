@@ -3,9 +3,8 @@
     <!-- 背景圆形 -->
     <circle cx="16" cy="16" r="15" fill="url(#gradient)" stroke="white" stroke-width="2"/>
     
-    <!-- 音符图案 -->
-    <path d="M12 10C12 10 12 15 12 17C12 19 14 21 16 21C18 21 20 19 20 17C20 15 18 13 16 13C14 13 12 15 12 17" stroke="white" stroke-width="2" stroke-linecap="round"/>
-    <path d="M16 21V28" stroke="white" stroke-width="2" stroke-linecap="round"/>
+    <!-- 文字 -->
+    <text x="16" y="22" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">m</text>
     
     <!-- 渐变定义 -->
     <defs>

@@ -1,18 +1,18 @@
 /* 基础样式 */
 :root {
     --primary-color: #6c5ce7;
-    --secondary-color: #00cec9;
+    --secondary-color: #a29bfe;
     --text-color: #2d3436;
     --light-gray: #f5f6fa;
     --medium-gray: #dfe6e9;
     --dark-gray: #636e72;
-    --correct-color: #00b894;
-    --partial-color: #fdcb6e;
+    --correct-color: #6c5ce7;
+    --partial-color: #a29bfe;
     --incorrect-color: #b2bec3;
-    --shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    --shadow: 0 8px 16px rgba(108, 92, 231, 0.1);
     --border-radius: 12px;
     --gradient-primary: linear-gradient(135deg, #6c5ce7, #a29bfe);
-    --gradient-secondary: linear-gradient(135deg, #00cec9, #81ecec);
+    --gradient-secondary: linear-gradient(135deg, #a29bfe, #6c5ce7);
 }
 
 * {
@@ -215,8 +215,8 @@ main {
 }
 
 #message {
-    background: var(--gradient-secondary);
-    padding: 1.2rem;
+    background: var(--gradient-primary);
+    padding: 1.5rem;
     border-radius: var(--border-radius);
     margin: 1.5rem 0;
     color: white;
@@ -224,6 +224,12 @@ main {
     min-height: 60px;
     box-shadow: var(--shadow);
     animation: fadeIn 0.5s ease;
+    line-height: 1.8;
+}
+
+#message p {
+    margin: 0.5rem 0;
+    font-size: 1.1rem;
 }
 
 @keyframes fadeIn {
@@ -286,7 +292,7 @@ button:active {
 #guess-id:focus {
     border-color: var(--primary-color);
     outline: none;
-    box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.2);
+    box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.1);
     transform: translateY(-2px);
 }
 
@@ -322,10 +328,33 @@ button:active {
     margin-top: 2rem;
     display: grid;
     gap: 1rem;
-    padding: 1rem;
-    background: rgba(255, 255, 255, 0.8);
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.95);
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
+}
+
+.hint-line {
+    margin: 0.5rem 0;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    display: inline-block;
+    font-weight: 500;
+}
+
+.hint-correct {
+    background-color: rgba(108, 92, 231, 0.1);
+    color: var(--primary-color);
+}
+
+.hint-partial {
+    background-color: rgba(162, 155, 254, 0.1);
+    color: var(--secondary-color);
+}
+
+.hint-incorrect {
+    background-color: rgba(178, 190, 195, 0.1);
+    color: var(--dark-gray);
 }
 
 /* 关于模态框 */
@@ -414,23 +443,6 @@ button:active {
 
 .guess-bottom {
     padding: 1rem;
-}
-
-.hint-line {
-    margin: 0.4rem 0;
-    padding: 0.2rem 0;
-}
-
-.hint-correct {
-    color: var(--correct-color);
-}
-
-.hint-partial {
-    color: var(--partial-color);
-}
-
-.hint-incorrect {
-    color: var(--incorrect-color);
 }
 
 /* 页脚 */
