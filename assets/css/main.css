@@ -87,6 +87,7 @@ nav ul li {
     justify-content: center;
     text-decoration: none;
     padding: 0;
+    line-height: 1;
 }
 
 .nav-button img {
@@ -94,6 +95,7 @@ nav ul li {
     height: 20px;
     filter: brightness(0) invert(1);
     transition: transform 0.3s ease;
+    display: block;
 }
 
 .nav-button:hover {
@@ -305,9 +307,9 @@ button:active {
 
 #search-results {
     position: absolute;
-    top: calc(100% - 8px);  /* 调整这里修复错位 */
+    top: calc(100% - 8px);
     left: 50%;
-    transform: translateX(-50%);  /* 居中定位 */
+    transform: translateX(-50%);
     width: 80%;
     max-width: 500px;
     background: white;
@@ -321,13 +323,40 @@ button:active {
 }
 
 .search-result {
-    padding: 0.7rem;
+    padding: 0.8rem 1rem;
     cursor: pointer;
     border-bottom: 1px solid var(--light-gray);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
 }
 
 .search-result:hover {
     background-color: var(--light-gray);
+}
+
+.search-result:last-child {
+    border-bottom: none;
+}
+
+/* 自定义滚动条样式 */
+#search-results::-webkit-scrollbar {
+    width: 8px;
+}
+
+#search-results::-webkit-scrollbar-track {
+    background: var(--light-gray);
+    border-radius: 4px;
+}
+
+#search-results::-webkit-scrollbar-thumb {
+    background: var(--medium-gray);
+    border-radius: 4px;
+}
+
+#search-results::-webkit-scrollbar-thumb:hover {
+    background: var(--dark-gray);
 }
 
 /* 提示容器 */
