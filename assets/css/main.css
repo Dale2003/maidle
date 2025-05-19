@@ -774,7 +774,7 @@ footer a:hover {
 }
 
 .author {
-    margin: 10em 0 0 1.2rem;
+    margin: -1em 0 0 1.2rem;
     color: var(--dark-gray);
     font-size: 1.2rem;
     display: flex;
