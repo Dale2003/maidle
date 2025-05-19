@@ -1,16 +1,18 @@
 /* 基础样式 */
 :root {
-    --primary-color: #4caf50;
-    --secondary-color: #2196f3;
-    --text-color: #333;
-    --light-gray: #f3f3f3;
-    --medium-gray: #ccc;
-    --dark-gray: #666;
-    --correct-color: #4caf50;
-    --partial-color: #ff9800;
-    --incorrect-color: #757575;
-    --shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    --border-radius: 8px;
+    --primary-color: #6c5ce7;
+    --secondary-color: #00cec9;
+    --text-color: #2d3436;
+    --light-gray: #f5f6fa;
+    --medium-gray: #dfe6e9;
+    --dark-gray: #636e72;
+    --correct-color: #00b894;
+    --partial-color: #fdcb6e;
+    --incorrect-color: #b2bec3;
+    --shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    --border-radius: 12px;
+    --gradient-primary: linear-gradient(135deg, #6c5ce7, #a29bfe);
+    --gradient-secondary: linear-gradient(135deg, #00cec9, #81ecec);
 }
 
 * {
@@ -23,7 +25,8 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
     color: var(--text-color);
-    background-color: #f9f9f9;
+    background: linear-gradient(135deg, #f5f6fa 0%, #dfe6e9 100%);
+    min-height: 100vh;
     margin: 0;
     padding: 0;
 }
@@ -39,16 +42,24 @@ a:hover {
 
 /* 头部样式 */
 header {
-    background-color: white;
+    background: var(--gradient-primary);
     box-shadow: var(--shadow);
-    padding: 1rem;
+    padding: 1.2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
 .logo img {
-    height: 40px;
+    height: 45px;
+    transition: transform 0.3s ease;
+}
+
+.logo img:hover {
+    transform: scale(1.05);
 }
 
 nav ul {
@@ -101,7 +112,8 @@ main {
 /* 加载屏幕 */
 #loading {
     text-align: center;
-    padding: 2rem;
+    padding: 3rem;
+    animation: fadeIn 0.5s ease;
 }
 
 #loading h1 {
@@ -113,18 +125,42 @@ main {
 #progress-container {
     width: 80%;
     margin: 0 auto;
-    background-color: var(--light-gray);
+    background: rgba(255, 255, 255, 0.2);
     border-radius: var(--border-radius);
-    height: 20px;
+    height: 24px;
     overflow: hidden;
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
 }
 
 #progress-bar {
     width: 0%;
     height: 100%;
-    background-color: var(--primary-color);
-    transition: width 0.3s ease;
+    background: var(--gradient-primary);
+    transition: width 0.5s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+#progress-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.3) 50%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
 }
 
 #progress-text {
@@ -135,11 +171,17 @@ main {
 
 /* 游戏容器 */
 #game-container {
-    background-color: white;
+    background: rgba(255, 255, 255, 0.95);
     border-radius: var(--border-radius);
-    padding: 2rem;
+    padding: 2.5rem;
     box-shadow: var(--shadow);
     position: relative;
+    backdrop-filter: blur(10px);
+    transition: transform 0.3s ease;
+}
+
+#game-container:hover {
+    transform: translateY(-5px);
 }
 
 #game-container h1 {
@@ -173,36 +215,45 @@ main {
 }
 
 #message {
-    background-color: var(--light-gray);
-    padding: 1rem;
+    background: var(--gradient-secondary);
+    padding: 1.2rem;
     border-radius: var(--border-radius);
-    margin: 1rem 0;
-    color: var(--text-color);
+    margin: 1.5rem 0;
+    color: white;
     text-align: center;
     min-height: 60px;
+    box-shadow: var(--shadow);
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 /* 按钮样式 */
 button {
     font-size: 1.1rem;
-    padding: 0.7rem 1.5rem;
+    padding: 0.8rem 1.8rem;
     margin: 0.5rem;
     border: none;
     border-radius: var(--border-radius);
-    background-color: var(--primary-color);
+    background: var(--gradient-primary);
     color: white;
     cursor: pointer;
-    transition: background-color 0.2s, transform 0.1s;
+    transition: all 0.3s ease;
     box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
 }
 
 button:hover {
-    background-color: #3d9c40;
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 20px rgba(108, 92, 231, 0.2);
 }
 
 button:active {
-    transform: translateY(0);
+    transform: translateY(-1px);
 }
 
 /* 移除旧的关于按钮特殊样式 */
@@ -215,25 +266,28 @@ button:active {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 1.5rem 0;
+    margin: 2rem 0;
     position: relative;
     width: 100%;
 }
 
 #guess-id {
     font-size: 1.1rem;
-    padding: 0.8rem;
+    padding: 1rem;
     width: 80%;
     max-width: 500px;
     border: 2px solid var(--medium-gray);
     border-radius: var(--border-radius);
     margin-bottom: 0.5rem;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.9);
 }
 
 #guess-id:focus {
     border-color: var(--primary-color);
     outline: none;
-    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+    box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.2);
+    transform: translateY(-2px);
 }
 
 #search-results {
@@ -266,10 +320,12 @@ button:active {
 /* 提示容器 */
 #hints-container {
     margin-top: 2rem;
+    display: grid;
+    gap: 1rem;
     padding: 1rem;
-    background-color: var(--light-gray);
+    background: rgba(255, 255, 255, 0.8);
     border-radius: var(--border-radius);
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow);
 }
 
 /* 关于模态框 */
@@ -318,13 +374,15 @@ button:active {
 
 /* 猜测提示样式 */
 .guess-block {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 1.5rem;
-    background-color: white;
+    background: white;
     border-radius: var(--border-radius);
-    overflow: hidden;
-    box-shadow: var(--shadow);
+    padding: 1.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+}
+
+.guess-block:hover {
+    transform: translateY(-3px);
 }
 
 .guess-top {
@@ -377,17 +435,26 @@ button:active {
 
 /* 页脚 */
 footer {
-    background-color: var(--light-gray);
-    color: var(--dark-gray);
+    background: var(--gradient-primary);
+    color: white;
+    padding: 2rem;
     text-align: center;
-    padding: 1.5rem;
     margin-top: 3rem;
-    border-top: 1px solid var(--medium-gray);
 }
 
 footer p {
     margin: 0.5rem 0;
-    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+footer a {
+    color: white;
+    text-decoration: underline;
+    transition: opacity 0.3s ease;
+}
+
+footer a:hover {
+    opacity: 0.8;
 }
 
 /* 添加标题容器样式 */
