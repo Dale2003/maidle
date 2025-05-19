@@ -1,49 +1,53 @@
-// 搜索匹配项
-function searchMatches() {
-    const input = document.getElementById("guess-id").value.trim().toLowerCase();
-    const resultsContainer = document.getElementById("search-results");
-    resultsContainer.innerHTML = ""; // 清空之前的搜索结果
+// 搜索功能
+function setupSearch() {
+    const searchInput = document.getElementById('guess-id');
+    const searchResults = document.getElementById('search-results');
+    let timeoutId;
 
-    if (!input) {
-        resultsContainer.style.display = "none";
-        return;
-    }
+    searchInput.addEventListener('input', function() {
+        clearTimeout(timeoutId);
+        const query = this.value.trim();
+        
+        if (query.length === 0) {
+            searchResults.innerHTML = '';
+            searchResults.classList.remove('active');
+            return;
+        }
 
-    const matches = Object.keys(music_alias)
-    .filter(key => {
-        const music = music_alias[key];
-        const aliases = music.alias || [];
-        return (
-            key.toLowerCase().includes(input) ||
-            music.title.toLowerCase().includes(input) ||
-            aliases.some(alias => alias.toLowerCase().includes(input))
-        );
-    })
-    .map(key => {
-        const music = music_alias[key];
-        return `<div style="padding: 5px; cursor: pointer;" onclick="selectMatch('${key}')">${music.title} (ID: ${key})</div>`;
+        timeoutId = setTimeout(() => {
+            const results = window.songList.filter(song => 
+                song.id < 100000 && (
+                    song.id.toString().includes(query) || 
+                    song.name.toLowerCase().includes(query.toLowerCase())
+                )
+            ).slice(0, 10);
+
+            if (results.length > 0) {
+                searchResults.innerHTML = results.map(song => `
+                    <div class="search-result-item" data-id="${song.id}">
+                        <div class="song-id">#${song.id}</div>
+                        <div class="song-name">${song.name}</div>
+                    </div>
+                `).join('');
+                searchResults.classList.add('active');
+            } else {
+                searchResults.innerHTML = '<div class="search-result-item">没有找到匹配的歌曲</div>';
+                searchResults.classList.add('active');
+            }
+        }, 300);
     });
 
-    if (matches.length > 0) {
-        resultsContainer.innerHTML = matches.join("");
-        resultsContainer.style.display = "block";
-    } else {
-        resultsContainer.style.display = "none";
-    }
-}
+    searchResults.addEventListener('click', function(e) {
+        const resultItem = e.target.closest('.search-result-item');
+        if (resultItem && resultItem.dataset.id) {
+            searchInput.value = resultItem.dataset.id;
+            searchResults.classList.remove('active');
+        }
+    });
 
-// 点击筛选框外部时隐藏筛选框
-document.addEventListener("click", (event) => {
-    const resultsContainer = document.getElementById("search-results");
-    const inputField = document.getElementById("guess-id");
-    
-    if (!resultsContainer.contains(event.target) && event.target !== inputField) {
-        resultsContainer.style.display = "none";
-    }
-});
-
-// 选择匹配项
-function selectMatch(id) {
-    document.getElementById("guess-id").value = id;
-    document.getElementById("search-results").style.display = "none";
+    document.addEventListener('click', function(e) {
+        if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+            searchResults.classList.remove('active');
+        }
+    });
 }
