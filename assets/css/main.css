@@ -6,8 +6,8 @@
     --light-gray: #f5f6fa;
     --medium-gray: #dfe6e9;
     --dark-gray: #636e72;
-    --correct-color: #6c5ce7;
-    --partial-color: #a29bfe;
+    --correct-color: #00b894;
+    --partial-color: #fdcb6e;
     --incorrect-color: #b2bec3;
     --shadow: 0 8px 16px rgba(108, 92, 231, 0.1);
     --border-radius: 12px;
@@ -214,22 +214,26 @@ main {
     background-color: white;
 }
 
+/* 消息提示框 */
 #message {
     background: var(--gradient-primary);
-    padding: 1.5rem;
+    padding: 1rem;
     border-radius: var(--border-radius);
-    margin: 1.5rem 0;
+    margin: 1rem 0;
     color: white;
     text-align: center;
-    min-height: 60px;
+    min-height: 50px;
     box-shadow: var(--shadow);
     animation: fadeIn 0.5s ease;
-    line-height: 1.8;
+    line-height: 1.6;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 #message p {
-    margin: 0.5rem 0;
-    font-size: 1.1rem;
+    margin: 0.3rem 0;
+    font-size: 1rem;
 }
 
 @keyframes fadeIn {
@@ -335,21 +339,23 @@ button:active {
 }
 
 .hint-line {
-    margin: 0.5rem 0;
-    padding: 0.5rem 1rem;
+    margin: 0.3rem 0;
+    padding: 0.3rem 0.8rem;
     border-radius: var(--border-radius);
     display: inline-block;
     font-weight: 500;
+    font-size: 0.95rem;
+    white-space: nowrap;
 }
 
 .hint-correct {
-    background-color: rgba(108, 92, 231, 0.1);
-    color: var(--primary-color);
+    background-color: rgba(0, 184, 148, 0.1);
+    color: var(--correct-color);
 }
 
 .hint-partial {
-    background-color: rgba(162, 155, 254, 0.1);
-    color: var(--secondary-color);
+    background-color: rgba(253, 203, 110, 0.1);
+    color: var(--partial-color);
 }
 
 .hint-incorrect {
@@ -408,6 +414,8 @@ button:active {
     padding: 1.5rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
     transition: transform 0.3s ease;
+    display: flex;
+    gap: 1.5rem;
 }
 
 .guess-block:hover {
@@ -417,8 +425,9 @@ button:active {
 .guess-top {
     display: flex;
     align-items: flex-start;
-    padding: 1rem;
+    padding: 0.5rem;
     border-bottom: 1px solid var(--light-gray);
+    flex: 1;
 }
 
 .guess-left {
@@ -434,15 +443,15 @@ button:active {
 }
 
 .jacket-img {
-    width: 80px;
-    height: 80px;
-    border-radius: 6px;
-    margin-left: 1rem;
+    width: 100px;
+    height: 100px;
+    border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    object-fit: cover;
 }
 
 .guess-bottom {
-    padding: 1rem;
+    padding: 0.5rem;
 }
 
 /* 页脚 */
