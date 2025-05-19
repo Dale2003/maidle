@@ -402,6 +402,7 @@ button:active {
     background: rgba(255, 255, 255, 0.95);
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
+    display: none; /* 默认隐藏 */
 }
 
 .hint-line {
