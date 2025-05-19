@@ -264,11 +264,6 @@ button:active {
     transform: translateY(-1px);
 }
 
-/* 移除旧的关于按钮特殊样式 */
-#about-button {
-    /* 移除这些特殊样式 */
-}
-
 /* 搜索和输入区域 */
 .input-area {
     display: flex;
@@ -492,11 +487,15 @@ button:active {
         align-items: flex-start;
         margin-bottom: 0;
         flex: 1;
-        padding-right: 50px; /* 增加右侧空间 */
+        padding-right: 50px;
+    }
+
+    .guess-left .hint-line {
+        margin: 0.3rem 0; /* 增加上半部分标签的上下间距 */
     }
 
     .jacket-img {
-        width: 120px; /* 增加封面尺寸 */
+        width: 120px;
         height: 120px;
         margin: 0;
         position: absolute;
@@ -507,13 +506,13 @@ button:active {
     .guess-bottom {
         display: flex;
         flex-wrap: wrap;
-        gap: 0.3rem; /* 增加标签间距 */
+        gap: 0.3rem;
         padding: 0.3rem;
     }
 
     .hint-line {
         margin: 0;
-        padding: 0.3rem 0.5rem; /* 增加标签内边距 */
+        padding: 0.3rem 0.5rem;
         font-size: 0.9rem;
     }
 }
