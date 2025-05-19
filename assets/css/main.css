@@ -65,39 +65,49 @@ nav ul {
     list-style: none;
     margin: 0;
     padding: 0;
+    gap: 0.8rem;
 }
 
 nav ul li {
-    margin-left: 1rem;
+    margin: 0;
 }
 
-/* 添加导航按钮通用样式 */
+/* 导航按钮图标样式 */
 .nav-button {
-    font-size: 1.1rem;
-    padding: 0.7rem 1.5rem;
-    border: none;
-    border-radius: var(--border-radius);
-    background-color: var(--primary-color);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.2);
     color: white;
     cursor: pointer;
-    transition: background-color 0.2s, transform 0.1s;
-    box-shadow: var(--shadow);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     text-decoration: none;
-    display: inline-block;
+    padding: 0;
+}
+
+.nav-button img {
+    width: 20px;
+    height: 20px;
+    filter: brightness(0) invert(1);
+    transition: transform 0.3s ease;
 }
 
 .nav-button:hover {
-    background-color: #3d9c40;
+    background: rgba(255, 255, 255, 0.2);
     transform: translateY(-2px);
     text-decoration: none;
 }
 
-.nav-button.secondary {
-    background-color: var(--secondary-color);
+.nav-button:hover img {
+    transform: scale(1.1);
 }
 
-.nav-button.secondary:hover {
-    background-color: #1a7fd1;
+.nav-button:active {
+    transform: translateY(0);
 }
 
 /* 主要内容区域 */
@@ -491,12 +501,12 @@ button:active {
     }
 
     .guess-left .hint-line {
-        margin: 0.3rem 0; /* 增加上半部分标签的上下间距 */
+        margin: 0.1rem 0; /* 增加上半部分标签的上下间距 */
     }
 
     .jacket-img {
-        width: 120px;
-        height: 120px;
+        width: 160px;
+        height: 160px;
         margin: 0;
         position: absolute;
         right: 0;
@@ -580,5 +590,15 @@ footer a:hover {
     
     .author {
         margin: 0.5rem 0 0 0;
+    }
+
+    .nav-button {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .nav-button img {
+        width: 18px;
+        height: 18px;
     }
 }
