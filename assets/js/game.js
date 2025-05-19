@@ -43,6 +43,8 @@ function startGame() {
     
     document.getElementById("message").innerHTML = "<p>游戏开始！你一共有十次机会猜曲目，每猜一次会给出提示。</p>";
     document.getElementById("hints-container").innerHTML = "";
+    // 确保提示容器隐藏
+    document.getElementById("hints-container").style.display = "none";
 }
 
 // 提交猜测
@@ -196,6 +198,15 @@ function getHint(target, guess) {
 function renderHints() {
     const hintsContainer = document.getElementById("hints-container");
     hintsContainer.innerHTML = "";
+    
+    // 如果没有猜测，隐藏提示容器并返回
+    if (hintsList.length === 0) {
+        hintsContainer.style.display = "none";
+        return;
+    }
+    
+    // 有猜测结果，显示提示容器
+    hintsContainer.style.display = "grid";
     
     // 创建一个副本并倒序，这样最新的猜测会显示在顶部
     const hintsReversed = [...hintsList].reverse();
