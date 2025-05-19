@@ -359,11 +359,10 @@ button:active {
     border-radius: 8px;
     margin-bottom: 4px;
     display: flex;
-    flex-direction: column;
-    gap: 4px;
+    align-items: center;
+    gap: 8px;
     background: var(--light-gray);
-    border: 1px solid var(--medium-gray);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: background-color 0.2s ease;
 }
 
 .search-result-item:last-child {
@@ -375,29 +374,23 @@ button:active {
 }
 
 .search-result-item .song-id {
-    color: var(--dark-gray);
+    color: var(--primary-color);
     font-size: 0.9em;
-    background: white;
-    padding: 4px 8px;
+    font-weight: 600;
+    padding: 2px 6px;
     border-radius: 4px;
-    font-weight: 500;
-    border: 1px solid var(--medium-gray);
-    width: fit-content;
-    text-align: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    background: rgba(108, 92, 231, 0.1);
+    flex-shrink: 0;
 }
 
 .search-result-item .song-name {
     color: var(--text-color);
     font-weight: 500;
-    padding: 4px 8px;
-    background: white;
-    border-radius: 4px;
-    border: 1px solid var(--medium-gray);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    flex: 1;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-size: 0.95em;
 }
 
 /* 提示容器 */
@@ -694,11 +687,10 @@ footer a:hover {
     
     .search-result-item .song-id {
         font-size: 0.85em;
-        padding: 3px 6px;
+        padding: 2px 4px;
     }
 
     .search-result-item .song-name {
-        padding: 3px 6px;
         font-size: 0.9em;
     }
 }
