@@ -640,12 +640,8 @@ footer a:hover {
 }
 
 .author {
-    margin: 0 0 0 1rem;
-    color: var(--dark-gray);
-    font-size: 1.2rem;
-    line-height: 1;
-    display: flex;
-    align-items: center;
+    margin: 0 0 0 0rem;
+    /* font-style: italic; */
 }
 
 /* 响应式调整 */
