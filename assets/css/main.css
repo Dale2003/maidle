@@ -72,20 +72,19 @@ nav ul li {
     margin: 0;
 }
 
-/* 导航按钮图标样式 */
+/* 导航按钮样式 */
 .nav-button {
     width: 40px;
     height: 40px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.1);
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
     cursor: pointer;
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
-    text-decoration: none;
     padding: 0;
     line-height: 1;
 }
@@ -94,22 +93,16 @@ nav ul li {
     width: 20px;
     height: 20px;
     filter: brightness(0) invert(1);
-    transition: transform 0.3s ease;
-    display: block;
+    transition: all 0.3s ease;
 }
 
 .nav-button:hover {
     background: rgba(255, 255, 255, 0.2);
     transform: translateY(-2px);
-    text-decoration: none;
 }
 
 .nav-button:hover img {
     transform: scale(1.1);
-}
-
-.nav-button:active {
-    transform: translateY(0);
 }
 
 /* 主要内容区域 */
@@ -276,87 +269,107 @@ button:active {
     transform: translateY(-1px);
 }
 
-/* 搜索和输入区域 */
+/* 搜索框样式 */
 .input-area {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 2rem 0;
     position: relative;
     width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
 }
 
-#guess-id {
-    font-size: 1.1rem;
-    padding: 1rem;
-    width: 80%;
-    max-width: 500px;
-    border: 2px solid var(--medium-gray);
-    border-radius: var(--border-radius);
-    margin-bottom: 0.5rem;
+.input-area input {
+    width: 100%;
+    padding: 12px 20px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    font-size: 16px;
     transition: all 0.3s ease;
-    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-#guess-id:focus {
-    border-color: var(--primary-color);
+.input-area input:focus {
     outline: none;
-    box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.1);
-    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
-#search-results {
+.input-area input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* 搜索结果样式 */
+.search-results {
     position: absolute;
-    top: calc(100% - 8px);
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80%;
-    max-width: 500px;
-    background: white;
-    border: 1px solid var(--medium-gray);
-    border-radius: 0 0 var(--border-radius) var(--border-radius);
-    max-height: 200px;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    margin-top: 8px;
+    max-height: 300px;
     overflow-y: auto;
-    display: none;
     z-index: 1000;
-    box-shadow: var(--shadow);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    pointer-events: none;
 }
 
-.search-result {
-    padding: 0.8rem 1rem;
+.search-results.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.search-results::-webkit-scrollbar {
+    width: 6px;
+}
+
+.search-results::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+}
+
+.search-results::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+}
+
+.search-results::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.search-result-item {
+    padding: 12px 16px;
     cursor: pointer;
-    border-bottom: 1px solid var(--light-gray);
     transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.search-result:hover {
-    background-color: var(--light-gray);
-}
-
-.search-result:last-child {
+.search-result-item:last-child {
     border-bottom: none;
 }
 
-/* 自定义滚动条样式 */
-#search-results::-webkit-scrollbar {
-    width: 8px;
+.search-result-item:hover {
+    background: rgba(255, 255, 255, 0.1);
 }
 
-#search-results::-webkit-scrollbar-track {
-    background: var(--light-gray);
-    border-radius: 4px;
+.search-result-item .song-id {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9em;
+    margin-right: 8px;
 }
 
-#search-results::-webkit-scrollbar-thumb {
-    background: var(--medium-gray);
-    border-radius: 4px;
-}
-
-#search-results::-webkit-scrollbar-thumb:hover {
-    background: var(--dark-gray);
+.search-result-item .song-name {
+    color: #fff;
+    font-weight: 500;
 }
 
 /* 提示容器 */
@@ -629,5 +642,22 @@ footer a:hover {
     .nav-button img {
         width: 18px;
         height: 18px;
+    }
+
+    .input-area {
+        max-width: 100%;
+    }
+    
+    .input-area input {
+        padding: 10px 16px;
+        font-size: 14px;
+    }
+    
+    .search-results {
+        max-height: 250px;
+    }
+    
+    .search-result-item {
+        padding: 10px 14px;
     }
 }
