@@ -478,26 +478,30 @@ button:active {
 
     .guess-top {
         flex-direction: row;
-        align-items: center;
+        align-items: flex-start;
         text-align: left;
         border-bottom: none;
         padding-bottom: 0.8rem;
         margin-bottom: 0.8rem;
         border-bottom: 1px solid var(--light-gray);
         gap: 1rem;
+        position: relative;
     }
 
     .guess-left {
         align-items: flex-start;
         margin-bottom: 0;
         flex: 1;
+        padding-right: 90px; /* 为封面留出空间 */
     }
 
     .jacket-img {
         width: 80px;
         height: 80px;
         margin: 0;
-        flex-shrink: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
     }
 
     .guess-bottom {
