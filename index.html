@@ -41,8 +41,9 @@
         <!-- 游戏内容 -->
         <section id="game-container" style="display: none;">
             <div class="title-container">
-                <h1>Maidle 游戏</h1>
-                <p class="author">made by 宇航员Dale</p>
+                <h1>maidle</h1>
+                <span class="author">by dale2003</span>
+                <a href="https://maimai.dale2003.cn" target="_blank" class="maimai-link" title="maimai歌曲信息查询">🎵</a>
             </div>
             
             <!-- 难度选择 -->
@@ -76,7 +77,22 @@
             </div>
             
             <!-- 提示容器 -->
-            <div id="hints-container"></div>
+            <div id="hints-container" style="display: none;">
+                <div class="guess-block">
+                    <div class="guess-top">
+                        <div class="guess-left">
+                            <div class="guess-title">猜测提示</div>
+                            <div class="hint-line hint-correct">ID: 12345</div>
+                            <div class="hint-line hint-partial">类型: 标准</div>
+                        </div>
+                        <img src="assets/img/jacket.jpg" alt="封面" class="jacket-img">
+                    </div>
+                    <div class="guess-bottom">
+                        <div class="hint-line hint-incorrect">难度: 12</div>
+                        <div class="hint-line hint-incorrect">等级: S</div>
+                    </div>
+                </div>
+            </div>
         </section>
         
         <!-- 关于模态框 -->

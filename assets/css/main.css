@@ -631,6 +631,7 @@ footer a:hover {
     align-items: center;
     justify-content: center;
     margin-bottom: 1.5rem;
+    gap: 1rem;
 }
 
 .title-container h1 {
@@ -639,9 +640,23 @@ footer a:hover {
 }
 
 .author {
-    margin: 0 0 0 1rem;
-    /* font-style: italic; */
+    margin: 0;
     color: var(--dark-gray);
+}
+
+.maimai-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-size: 1.2em;
+    padding: 4px 8px;
+    border-radius: 8px;
+    background: rgba(108, 92, 231, 0.1);
+    transition: all 0.3s ease;
+}
+
+.maimai-link:hover {
+    background: rgba(108, 92, 231, 0.2);
+    transform: translateY(-2px);
 }
 
 /* 响应式调整 */
@@ -649,10 +664,15 @@ footer a:hover {
     .title-container {
         flex-direction: column;
         align-items: center;
+        gap: 0.5rem;
     }
     
     .author {
         margin: 0.5rem 0 0 0;
+    }
+
+    .maimai-link {
+        margin-top: 0.5rem;
     }
 
     .nav-button {
