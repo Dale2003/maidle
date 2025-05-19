@@ -316,7 +316,7 @@ button:active {
     border: 1px solid var(--medium-gray);
     opacity: 0;
     transform: translateY(-10px);
-    transition: all 0.3s ease;
+    transition: opacity 0.3s ease, transform 0.3s ease;
     pointer-events: none;
     padding: 8px;
 }
@@ -348,11 +348,11 @@ button:active {
 .search-result-item {
     padding: 8px 12px;
     cursor: pointer;
-    transition: all 0.2s ease;
     border-radius: 8px;
     margin-bottom: 4px;
     display: flex;
     align-items: center;
+    gap: 8px;
     background: var(--light-gray);
     border: 1px solid var(--medium-gray);
 }
@@ -368,7 +368,6 @@ button:active {
 .search-result-item .song-id {
     color: var(--dark-gray);
     font-size: 0.9em;
-    margin-right: 8px;
     background: white;
     padding: 2px 6px;
     border-radius: 4px;
@@ -376,6 +375,7 @@ button:active {
     border: 1px solid var(--medium-gray);
     min-width: 60px;
     text-align: center;
+    flex-shrink: 0;
 }
 
 .search-result-item .song-name {
@@ -383,6 +383,9 @@ button:active {
     font-weight: 500;
     flex: 1;
     padding: 2px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* 提示容器 */

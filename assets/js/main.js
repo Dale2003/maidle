@@ -25,8 +25,8 @@ function setupSearch() {
             if (results.length > 0) {
                 searchResults.innerHTML = results.map(song => `
                     <div class="search-result-item" data-id="${song.id}">
-                        <span class="song-id">#${song.id}</span>
-                        <span class="song-name">${song.name}</span>
+                        <div class="song-id">#${song.id}</div>
+                        <div class="song-name">${song.name}</div>
                     </div>
                 `).join('');
                 searchResults.classList.add('active');
